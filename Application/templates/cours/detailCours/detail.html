@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>{{cour.libele}}</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="Free Website Template" name="keywords">
+        <meta content="Free Website Template" name="description">
+
+       
+
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+        <!-- Icon Font Stylesheet -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="{% static 'detailCours/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+        <link href="{% static 'detailCours/lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+        <link href="{% static 'detailCours/lib/animate/animate.min.css' %}" rel="stylesheet">
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="{% static 'detailCours/css/bootstrap.min.css' %}" rel="stylesheet">
+
+        <!-- Template Stylesheet -->
+        <link href="{% static 'detailCours/css/style.css' %}" rel="stylesheet">
+    </head>
+
+    <body>
+       
+
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4 sticky-lg-top vh-100">
+                    <div class="d-flex flex-column h-100 text-center overflow-auto shadow">
+                        {% if professeur.photo_profile %}
+                        <img class="w-100 img-fluid mb-4" src="{{professeur.photo_profile.url}}" alt="Image">
+                        {% else %}
+                        <img class="w-100 img-fluid mb-4" src="{% static 'detailCours/img/profile.jpg' %}" alt="Image">
+                        {% endif %}
+                        <h1 class="text-primary mt-2">{{professeur.user.last_name}} {{professeur.user.first_name}}</h1>
+                        <div class="mb-4" style="height: 22px;">
+                            <h4 class="typed-text-output d-inline-block text-light"></h4>
+                            <div class="typed-text d-none">Professeur de {{cour.libele}}, Professeur de JEE, Professeur de Développement mobile</div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-auto mb-3">
+                            <a class="btn btn-secondary btn-square mx-1" href="#"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-secondary btn-square mx-1" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-secondary btn-square mx-1" href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-secondary btn-square mx-1" href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                        <div class="d-flex align-items-end justify-content-between border-top">
+                            
+                            <a href="#contact" class="btn w-50 btn-scroll">Me Contacter</a>
+                            <a href="#contact" class="btn w-50 btn-scroll">{{cour.professeur.tel}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <!-- About Start -->
+                    <a href="{% url 'cours' %}" class="btn btn-primary">Retour</a>
+                    <section class="py-5 border-bottom wow fadeInUp" data-wow-delay="0.1s">
+                        <h1 class="title pb-3 mb-5">{{cour.libele}}</h1>
+                        <p>{{cour.description}}</p>
+                    </section>
+                    <!-- About End -->
+
+                   
+
+                   
+
+                   
+                    <!-- Brochure Start -->
+                    <section class="py-5 border-bottom wow fadeInUp" data-wow-delay="0.1s">
+                        <h1 class="title pb-3 mb-5">Brochures</h1>
+                        {% if user.is_authenticated %}
+                        <div class="row g-4">
+                        {% if user.etudiant.licence.numero < cour.semestre.licence.numero %}
+                        <p class="alert alert-warning">vous ne pouvez pas voir les cours d'une licence que vous n'avez pas atteint</p>
+                        {% else %}
+                            {% for brochure in brochures %}
+                            <div class="col-md-6">
+                              <a href="{{brochure.doc.url}}"  target="_blank">
+                                <div class="service-item">
+                                    <i class="fa fa-2x fas fa-solid fa-book mx-auto mb-4"></i>
+                                    <h5 class="mb-2">{{brochure.matiere.libele}}</h5>
+                                    <p class="mb-0">{{brochure.titre}}</p>
+                                </div>
+                            </a>
+                                <a href="{{brochure.doc.url}}" download class="btn btn-primary"><i class="fas fa-download"></i></a>
+                              
+                                <a href="#"><i class="fas fa-calendar-days"></i></a> {{brochure.date}}
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+    
+                        </div>
+                        {% else %}
+                        <h3 class="alert alert-warning">Cet contenu est reservé aux utilisateurs authentifiés</h3>
+                        {% endif %}
+                    </section>
+                    <!-- Brochures End -->
+
+                    
+                    <!-- Anciens Sujets -->
+                    <section class="py-5 border-bottom wow fadeInUp" data-wow-delay="0.1s">
+                        <h1 class="title pb-3 mb-5">Anciens Sujets</h1>
+                        {% if user.is_authenticated %}
+                        <div class="row">
+                        {% if user.etudiant.licence.numero < cour.semestre.licence.numero %}
+                        <p class="alert alert-warning">vous ne pouvez pas voir les sujets d'une licence que vous n'avez pas atteint</p>
+                        {% else %}
+                            <div class="col-12">
+                                {% comment %} Filtre des Sujets {% endcomment %}
+                                {% comment %} <div class="row">
+                                    <div class="col-12 text-center mb-2">
+                                        <ul class="list-inline mb-4" id="portfolio-flters">
+                                            <li class="btn btn-secondary active" data-filter="*"><i class="fa fa-star me-2"></i>All</li>
+                                            {% for annee in annee_dispo %}
+                                                <li class="btn btn-secondary" data-filter=".annee-{{ annee }}"><i class="fa fa-laptop-code me-2"></i>{{ annee }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div> {% endcomment %}
+                                <div class="row portfolio-container">
+                                    {% for sujet in sujets %}
+                                        <div class="col-md-6 mb-4 portfolio-item annee-{{ sujet.année }}">
+                                            <div class="position-relative overflow-hidden mb-2">
+                                                <img class="img-fluid w-100" src="{{ sujet.image.url }}" alt="">
+                                                <div class="portfolio-btn d-flex align-items-center justify-content-center">
+                                                    <a href="{{ sujet.image.url }}" data-lightbox="portfolio">
+                                                        <i class="bi bi-plus text-light"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        </div>
+
+                        {% else %}
+                        <h3 class="alert alert-warning">Cet contenu est reservé aux utilisateurs authentifiés</h3>
+                        {% endif %}
+                    </section>
+                    <!-- Portfolio End -->
+
+
+                    <!-- Projets réalisés Start -->
+                    <section class="py-5 border-bottom wow fadeInUp" data-wow-delay="0.1s">
+                        <h1 class="title pb-3 mb-5">Projets Réalisés</h1>
+                        <div class="col-md-4 col-lg-6 col-xl-4">
+                            <div class="d-flex bg-secondary p-4">
+                                <h1 class="flex-shrink-0 display-5 text-primary mb-0" data-toggle="counter-up">{{nb_projet}}</h1>
+                                <div class="ps-3">
+                                    <p class="mb-0">Projets</p>
+                                    <h5 class="mb-0">Réalisés</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="owl-carousel testimonial-carousel">
+                        
+                            <div class="text-left">
+                                {% if projets %}
+                                {% for projet in projets %}
+                                    <i class="fa fa-3x fas fa-check-double text-primary mb-4"></i>
+                                    <p class="fs-4 mb-4">{{projet.description}}</p>
+                                    <div class="d-flex align-items-center">
+                                        <i class="img-fluid fas fa-briefcase fa-4x" style="width: 60px; height: 60px;"></i>
+                                        <div class="ps-3">
+                                            <p class="text-primary fs-5 mb-1">{{projet.titre}}</p>
+                                            {% if projet.lien %}
+                                            Lien: <i>{{projet.lien}}</i>
+                                            {% endif %}
+                                            <a class="btn btn-primary" href="#">Membres</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                {% else %}
+                                <h4 class="alert alert-info rounded">Projets en attente ...</h4>
+                                {% endif %}  
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Projet réalisés end -->
+
+                    <!-- Contact Start -->
+                    <section class="py-5 wow fadeInUp" data-wow-delay="0.1s" id="contact">
+                        <h1 class="title pb-3 mb-5">Contacter le Professeur</h1>
+                        <form>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control border-0 bg-secondary" id="name" placeholder="Votre nom complet">
+                                        <label for="name">Nom</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control border-0 bg-secondary" id="email" placeholder="Votre email">
+                                        <label for="email">Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control border-0 bg-secondary" id="subject" placeholder="le sujet de votre message">
+                                        <label for="subject">Objet</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control border-0 bg-secondary" placeholder="Ecrivez votre message ici" id="message" style="height: 200px"></textarea>
+                                        <label for="message">Votre message</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100 py-3" type="submit">Envoyer le Message</button>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+                    <!-- Contact End -->
+
+                   
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- Back to Top -->
+        <a href="#" class="back-to-top"><i class="fa fa-angle-double-up"></i></a>
+        
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'detailCours/lib/typed/typed.min.js' %}"></script>
+        <script src="{% static 'detailCours/lib/wow/wow.min.js' %}"></script>
+        <script src="{% static 'detailCours/lib/easing/easing.min.js' %}"></script>
+        <script src="{% static 'detailCours/lib/waypoints/waypoints.min.js' %}"></script>
+        <script src="{% static 'detailCours/lib/counterup/counterup.min.js' %}"></script>
+        <script src="{% static 'detailCours/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'detailCours/lib/isotope/isotope.pkgd.min.js' %}"></script>
+        <script src="{% static 'detailCours/lib/lightbox/js/lightbox.min.js' %}"></script>
+
+        <!-- Contact Javascript File -->
+        <script src="{% static 'detailCours/mail/jqBootstrapValidation.min.js' %}"></script>
+        <script src="{% static 'detailCours/mail/contact.js' %}"></script>
+
+        <!-- Template Javascript -->
+        <script src="{% static 'detailCours/js/main.js' %}"></script>
+    </body>
+</html>

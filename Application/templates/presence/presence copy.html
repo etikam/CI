@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block title %}Notes{% endblock title %}
+{% load static %}
+{% block containt %}
+  
+    <h1 style="color: blue; font-weight:1000">Présence des Etudiants en {{ matiere.libele }}</h1>
+    
+    <style>
+        @media screen and (max-width:576px) {
+            .container {
+                width: 100%;
+            } 
+        }
+
+        .date{
+            display: flex;
+        }
+        @media screen and (min-width:576px) {
+            
+       
+        .date{
+            display: flex;
+            width: 40%;
+        }
+    }
+    </style>
+
+    <div class="container d-flex flex-wrap presence" style="padding: 2%; width:90%; display:block">
+        <div class="row" style="width:100%;">
+           
+           <a href="{% url 'presence' matiere.slug %}" class="col btn btn-primary">Présence du jour</a>
+           <a href="{% url 'statistiques' matiere.slug %}" class="col btn btn-outline-primary">Statistiques Générales</a>
+            <input class="col-2 mt-1 mb-3 form-control" type="search" name="Recherche" id="Searche_Etudiant" placeholder="Chercher un Etudiant" style="right: 0px;">  
+        </div>
+        
+        {% block contenu_presence %}
+            
+        
+         
+         {% if erreur_date %}
+            <h2 class="alert alert-warning">{{erreur_date}}</h2> 
+         {% endif %}
+                
+        <form method="POST" action="{% url 'enregistrer_presence' %}"   style="width: 100%;">
+            {% csrf_token %}
+            <div class="date">
+                <label for="date_jour" class="form-label">Date</label>
+                <input type="date" name="date_jour" id="date_jour"  class="form-control" required>
+            </div>
+            <input type="hidden" name="matiere_slug" value="{{ matiere.slug }}">
+        
+            {% for Etudiant in Etudiants %}   
+                <div class="Etudiant_note row mb-2" style="width:100%">
+                    {% if Etudiant.photo_profile %}
+                        <img class="col-3" src="{{ Etudiant.photo_profile.url }}" alt="profile">
+                    {% endif %}
+                    <h3 class="col-6"><span style="color: blue;">{{ Etudiant.user.username }} </span>{{ Etudiant.last_name.upper }} {{ Etudiant.first_name.upper }} </h3>
+                    <div class="col-3" style="display: block; justify-content:center;align-items:center;margin:auto">
+                        <button type="button" class="btn state {{Etudiant.user.username}}" style="width: fit-content; height:fit-content" onclick="present('{{Etudiant.user.username}}')">Présent</button>
+                        <button type="button" class="btn state {{Etudiant.user.username}}" style="width: fit-content; height:fit-content" onclick="absent('{{Etudiant.user.username}}')">Absent</button>
+                    </div>
+                    <input  name="etudiant_ids[]" value="{{ Etudiant.user.username }}" type="hidden">
+                    <input  name="presence_states[]" value="null" id="{{Etudiant.user.username}}" type="hidden">
+                </div>
+
+            {% endfor %}
+           <div class="contenaire row">
+                <button  type="submit" class="btn btn-primary col-md">Sauvegarder</button>
+                
+                
+            </div>
+            
+        </form>
+        {% endblock contenu_presence %}
+        
+    </div>
+    <!-- Fenêtre modale -->
+    
+    <script src="{% static 'Application/style/jquery-3.7.1.min.js' %}"></script>
+    <script>
+
+            $('#Searche_Etudiant').on('input', function() {
+                var searchTerm = $(this).val().toLowerCase();
+    
+                $('.Etudiant_note').each(function() {
+                    var etudiantUsername = $(this).find('.matricule_note').text();
+                    var etudiantLastName = $(this).find('.col-6').text();
+    
+                    var usernameIndex = etudiantUsername.toLowerCase().indexOf(searchTerm);
+                    var lastNameIndex = etudiantLastName.toLowerCase().indexOf(searchTerm);
+    
+                    if (usernameIndex > -1 || lastNameIndex > -1) {
+                        // Afficher l'étudiant
+                        $(this).show();
+    
+                        // Mettre en surbrillance le texte correspondant
+                        if (usernameIndex > -1) {
+                            $(this).find('.matricule_note').html(highlightMatch(etudiantUsername, usernameIndex, searchTerm.length));
+                        }
+                        if (lastNameIndex > -1) {
+                            $(this).find('.col-6').html(highlightMatch(etudiantLastName, lastNameIndex, searchTerm.length));
+                        }
+                    } else {
+                        // Masquer l'étudiant s'il n'y a pas de correspondance
+                        $(this).hide();
+                    }
+                });
+            });
+    
+            function highlightMatch(text, index, length) {
+                // Mettre en surbrillance la chaîne trouvée avec une classe CSS
+                var highlightedText = text.substring(0, index) + '<span class="highlight">' + text.substring(index, index + length) + '</span>' + text.substring(index + length);
+                return highlightedText;
+            }
+        
+
+        
+
+        
+            function present(element) {
+                // Mettre la valeur "present" dans l'attribut value de l'input avec l'id state
+                document.getElementById(element).value = "present";
+                btn = document.getElementsByClassName(element);
+                btn[0].classList.add("btn-success");
+                btn[1].classList.remove("btn-danger");
+                
+
+                
+            }
+        
+            function absent(element) {
+                // Mettre la valeur "absent" dans l'attribut value de l'input avec l'id state
+                document.getElementById(element).value = "absent";
+
+                btn = document.getElementsByClassName(element);
+                btn[0].classList.remove("btn-success");
+                btn[1].classList.add("btn-danger");
+                
+       
+
+                
+            }
+
+    </script>
+    
+    <style>
+        .highlight {
+            background-color: yellow; /* Couleur de surbrillance */
+            font-weight: bold; /* Texte en gras */
+        }
+    </style>
+
+{% endblock %}

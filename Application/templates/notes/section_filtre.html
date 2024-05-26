@@ -1,0 +1,17 @@
+{% load static %}
+<div class="container mt-4 mb-3 border-3 rounded-3 ">
+    
+        <form action="{% url 'cours' %}" method="post" class="row d-flex " >
+            {% csrf_token %}
+            
+            <label for="Sémestre: " class="form-label col-sm-2"> Choisir un Sémestres</label>
+            <select name="semestre" id="departement" class="form-select col-6 mt-2">
+                <option value="">Tous les Semestres</option>       
+                {% for sem in semestres %}
+                <option value="{{sem.numero}}">{{sem.numero}}</option>       
+                {% endfor %}
+            </select>
+                <button type="submit" class="btn btn-primary col-2 mt-2">Filtrer</button>
+        </form>
+   
+</div>

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block containt %}
+<!-- page title -->
+<section class="page-title-section overlay" data-background="{% static 'images/backgrounds/page-title.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <ul class="list-inline custom-breadcrumb mb-2">
+            <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="{% url 'index'%}">Accueil</a></li>
+            <li class="list-inline-item text-white h3 font-secondary nasted">Choix de Matière pour Les Archives</li>
+          </ul>
+          <p class="text-lighten mb-0">Vous devez d'abord choisir la matière pour laquelle vous voulez ajouter des Documentations (cela est fait pour les professeur enseignants plusieur matières)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- /page title -->
+  <div class="container" >
+    <form action="" method="post" >
+        {% csrf_token %}
+        <h3>Archivage</h3>
+        <label for="choix"><i> Choisir une Matière si vous en enseignez plusieurs</i></label>
+        <select name="matiere_choisie" id="choix" class="form-select">
+            {% for matiere  in  matieres_prof %}
+            <option value="{{matiere.slug}}" class="form-control">{{matiere.libele}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Suivant" class="btn btn-primary mt-3">
+    </form>
+</div>
+{% endblock  %}
+

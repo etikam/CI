@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block containt %}
+    <!-- page title -->
+<section class="page-title-section overlay" data-background="{% static 'images/backgrounds/page-title.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <ul class="list-inline custom-breadcrumb mb-2">
+            <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="{% url 'index'%}">Accueil</a></li>
+            <li class="list-inline-item text-white h3 font-secondary nasted">Archivage</li>
+            <li class="list-inline-item nasted"><a class="h2 text-primary font-secondary" href="{% url 'index'%}">Historiques</a></li>
+          </ul>
+          <p class="text-lighten mb-0">Tous les Documents que vous soumettrez ici ne serront visibles que par vos Etudiants et ceux qui on déja suivi ce cours</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- /page title -->
+
+    <div class="container" class="form" style="width: 70%; height:50%; display:block">
+        <form action="{% url 'brochure' matiere.slug %}" method="post" class="form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2>{{matiere.libele}}</h2>
+            <div class="row mb-2">
+                <label for="titre" class="form-label">Titre de la Brochure </label>
+                <input type="text" id="titre" class="form-control" name="titre" required>
+            </div>
+            <div class="row mb-2">
+                <label for="fichier">Fichier</label>
+                <input type="file" name="fichier" id="fichier" class="form-control" required accept=".pdf, .xlsx, .xls, .doc, .docx, .ppt, .pptx">
+            </div>
+        
+            <div class="row mb-2">
+                <button type="submit" class="col-8 btn btn-outline-primary">Soumettre</button>
+                <button type="reset" class="col-4 btn btn-outline-danger">Vider</button>
+            </div>
+            <p><i>Tout Document que vous soumettrez ici séra vu par vos Etudiants</i></p>
+        </form>
+        
+    </div>
+{% endblock %}
+
+    

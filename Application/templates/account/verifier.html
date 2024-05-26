@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/bootstrap.min.css' %}">
+    <title>Verifier</title>
+    <style>
+        body {
+            background-color: rgb(255, 255, 255);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .check_form {
+            width: 40vw;
+            height: 50vh;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0px 0px 5px 5px rgb(126, 125, 125);
+           
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+      
+            padding-left: 5%;
+            padding-right: 5%;
+
+        }
+
+        @media only screen and (max-width: 600px) {
+            .check_form {
+                width: 90%;
+            }
+        }
+        form h3{
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="check_form">
+        <form action="{% url 'verifier'%}" method="POST" class="row">
+            {% csrf_token %}
+            <div class="col-12">
+                <h3>Commençons par Vérifier vos Informations</h3>
+            </div>
+            {% if error %}
+                <div class="col-12">
+                    <h4 class="alert alert-warning">{{error}}</h4>
+                </div>
+            {% endif %}
+            <div class="col-12">
+                <input type="text" class="form-control mb-3" id="pv" name="pv" placeholder="PV BAC" required>
+            </div>
+            <div class="col-12">
+                <input type="text" class="form-control mb-1" id="ine" name="ine" placeholder="INE GUPOL" aria-describedby="description_ine" >
+                <small id="description_ine" class="form-text text-muted">Il s'agit de votre INE d'orientation.</small>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Vérifier</button>
+                <a class="btn btn-secondary" href="{% url 'index'%}">Sortir </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

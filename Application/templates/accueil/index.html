@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock title %}
+{% block containt %}
+
+
+    {% include "accueil/_partials/hero.html" %}
+      <!-- /hero slider -->
+      
+      <!-- banner-feature -->
+      {% include "accueil/_partials/features.html" %}
+      
+      <!-- /banner-feature -->
+      
+      <!-- about us -->
+      
+      {% include "accueil/_partials/about.html" %}
+      <!-- /about us -->
+      
+      <!-- courses -->
+      
+      {% include "accueil/_partials/courses.html" %}
+      <!-- /courses -->
+      
+      <!-- cta -->
+      
+      {% comment %} {% include "accueil/_partials/cta.html" %} {% endcomment %}
+      <!-- /cta -->
+      
+      <!-- success story -->
+      {% include "accueil/_partials/storie.html" %}
+      
+      <!-- /success story -->
+      
+      <!-- events -->
+      
+      {% include "accueil/_partials/events.html" %}
+      <!-- /events -->
+      
+      <!-- teachers -->
+      {% include "accueil/_partials/teachers.html" %}
+      
+      <!-- /teachers -->
+      
+      <!-- blog -->
+      
+      {% include "accueil/_partials/blog.html" %}
+     
+      
+    {% endblock containt %}

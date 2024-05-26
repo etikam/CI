@@ -1,0 +1,42 @@
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+
+<section class="section-sm">
+    <div class="container">
+
+      <!-- course list -->
+    <div class="row justify-content-center">
+      <!-- course item -->
+      {% for cour in cours %}
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="card p-0 border-primary rounded-0 hover-shadow">
+            {% if cour.image %}
+              <img class="card-img-top rounded-0" src="" {{cour.image.url}}"course thumb">
+              {% else %}
+              <img class="card-img-top rounded-0" src="{% static 'images/courses/course-5.jpg' %}" alt="course thumb">
+              {% endif %}
+            <div class="card-body">
+              <ul class="list-inline mb-2">
+                <li class="list-inline-item"><i class="ti-calendar mr-1 text-color"></i>Semestre {{cour.semestre.numero}}</li>
+                <li class="list-inline-item"><a class="text-color" href="course-single.html"></a>{{cour.departement.libele}}</li>
+              </ul>
+              <a href="course-single.html">
+                <h4 class="card-title">{{cour.libele}}</h4>
+              </a>
+              <p class="card-text mb-4"> {{cour.description|slice:'30'}}...</p>
+              <a href="{% url 'detail_cour' cour.slug%}" class="btn btn-primary btn-sm">Voir plus</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+ 
+    </div>
+    <!-- /course list -->
+        <!-- mobile see all button -->
+        <div class="row">
+          <div class="col-12 text-center">
+            <a href="courses.html" class="btn btn-sm btn-outline-primary d-sm-none d-inline-block">Voir Toutes</a>
+          </div>
+        </div>
+      </div>
+  </section>

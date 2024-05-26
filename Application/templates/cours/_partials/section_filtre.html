@@ -1,0 +1,31 @@
+
+{% load static %}
+<div class="container mt-4">
+    
+        <form action="{% url 'cours' %}" method="post" class="row d-flex justify-content-center">
+            {% csrf_token %}
+            
+            <div class="col-sm-5 form-group">
+            <label for="departement: " class="form-label">Départements</label>
+            <select name="departement" id="departement" class="form-select ">
+                <option value="">Tous les Départements</option>       
+                {% for dep in departements %}
+                <option value="{{dep.slug}}">{{dep.libele}}</option>       
+                {% endfor %}
+            </select>
+            </div>
+            <div class="col-sm-5 form-group">
+            <label for="Sémestre: " class="form-label">Sémestres</label>
+            <select name="semestre" id="departement" class="form-select  ">
+                <option value="">Tous les Semestres</option>       
+                {% for sem in semestres %}
+                    <option value="{{sem.numero}}">{{sem.numero}}</option>       
+                {% endfor %}
+            </select>
+            </div>
+            
+                <button type="submit" class="btn btn-primary">Filtrer</button>
+       
+        </form>
+   
+</div>

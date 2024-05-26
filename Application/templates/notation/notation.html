@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block title %}Notes{% endblock title %}
+{% load static %}
+{% block containt %}
+  
+<!-- page title -->
+  
+<section class="page-title-section overlay" data-background="{% static 'images/backgrounds/page-title.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <ul class="list-inline custom-breadcrumb mb-2">
+            <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="{% url 'index'%}">Accueil</a></li>
+            <li class="list-inline-item text-white h3 font-secondary nasted">Notation</li>
+            <li class="list-inline-item text-white h3 font-secondary nasted"><i>{{matiere.libele}}</i></li>
+          </ul>
+          <p class="text-lighten mb-0">Votre interface de notation des Etudiants de votre classe, c'est à dire que vous ne verrez que les Etudiants inscrits pour suivre ce cours</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- /page title -->
+
+    <div class="container" style="padding: 1%; width:fit-content   ">
+        <div class="row">
+            <form class="col-10" id="classementForm" method="post" action="">
+                {% csrf_token %}
+                <input type="hidden" name="classement_clicked" value="true">
+                <button type="submit" class="col btn btn-outline-primary">Classer par Moyenne</button>
+            </form>
+            <form class="col-2" id="classementForm" method="post" action="">
+                {% csrf_token %}
+                <input type="hidden" name="classement" value="true">
+                <button type="submit" class="col btn btn-outline-warning">Actualiser</button>
+            </form>
+        </div>
+        <div class="row">
+            <input class="col mt-1 mb-3 form-control" type="search" name="Recherche" id="Searche_Etudiant"  placeholder="Chercher un Etudiant">  
+           
+        </div>  
+        {% for Etudiant in Etudiants %}   
+        
+        <div class="Etudiant_note row mb-2" style="width:100%" onclick="ouvrirFenetreModale('{{ Etudiant.Etudiant.user.username }}','{{Etudiant.note1}}','{{Etudiant.note2}}','{{Etudiant.note3}}')">
+            
+            {% if Etudiant.Etudiant.photo_profile %}
+    
+            <img class="col-3" src="{{Etudiant.Etudiant.photo_profile.url}}" alt="profile" > 
+            {% endif %}
+            <h3 class="col-6"> <span class="matricule_note">{{Etudiant.Etudiant.user.username}} </span>{{Etudiant.Etudiant.user.last_name.upper}} {{Etudiant.Etudiant.user.first_name.upper}}</h3>
+            <div class="col-3">
+                <input type="text" name="" id="" value="{{Etudiant.note1}}" readonly style="border: none; background:none">
+                <input type="text" name="" id="" value="{{Etudiant.note2}}" readonly style="border: none; background:none">
+                <input type="text" name="" id="" value="{{Etudiant.note3}}" readonly style="border: none; background:none">
+                <input type="text" value="{{Etudiant.moyenne|floatformat:2}}" style="border: none; background:none">
+
+             </div> 
+             {% if Etudiant.observation == "Dette" %}           
+                <input type="text" value="{{Etudiant.observation}}" style="border: none; height:60%" class="alert alert-danger">
+                {% endif %}
+                
+                {% if Etudiant.observation == "Session" %}
+                <input type="text" value="{{Etudiant.observation}}" style="border: none; height:60%" class="alert alert-warning">
+                {% endif %}
+                
+                {% if Etudiant.observation == "Validé" %}
+                    <input type="text" value="{{Etudiant.observation}}" style="border: none; height:60%" class="alert alert-success">
+            {% endif %}  
+
+        </div> 
+
+        <div class="modal fade mon_modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <form action="/noter/{{Etudiant.Etudiant.user.username}}/{{matiere.slug}}/" method="POST">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fermer()"></button><span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <input type="text" name="note1" id="m_note1" class="form-control col-4" placeholder="Note1" value="">
+                                <input type="text" name="note2" id="m_note2" class="form-control col-4" placeholder="Note2" value="">
+                                <input type="text" name="note3" id="m_note3" class="form-control col-4" placeholder="Note3" value="">
+                                <input type="text" id="etudiant" value="{{Etudiant.Etudiant.user.username}}" name="username" hidden>
+                            </div>
+                        </div>
+                        <div class="modal-footer " style="display:flex;">
+
+                            <button  type="submit" class="btn btn-primary ">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+    <!-- Fenêtre modale -->
+    <script src="{% static 'Application/style/jquery-3.7.1.min.js' %}"></script>
+    <script>
+        function ouvrirFenetreModale(username,note1,note2,note3) {
+            // Vous pouvez personnaliser le contenu de la fenêtre modale ici
+            // Par exemple, mettre à jour le titre avec le nom de l'Etudiant
+            document.getElementById('exampleModalLabel').innerHTML =  username;
+            $('#etudiant').val(username)
+            $('#m_note1').val(note1)
+            $('#m_note2').val(note2)
+            $('#m_note3').val(note3)
+            // Ouvrir la fenêtre modale
+            $('#myModal').modal('show');
+        }
+
+        function fermer(){
+            $("#myModal").modal('hide');
+        }
+        
+        
+    </script>
+
+{% endblock %}

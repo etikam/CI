@@ -1,0 +1,40 @@
+{% load static %}
+<section class="section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <h2 class="section-title">Our Teachers</h2>
+        </div>
+        <!-- teacher -->
+        {% for prof in professeurs %}
+            <div class="col-lg-4 col-sm-6 mb-5 mb-lg-0">
+              <div class="card border-0 rounded-0 hover-shadow">
+
+                {% if prof.photo_profile %}
+                  <img class="card-img-top rounded-0" src="{{prof.photo_profile.url}}" alt="teacher">
+                {% else %}
+                  <img class="card-img-top rounded-0" src="{% static 'images/teachers/teacher-1.jpg' %}" alt="teacher">
+                {% endif %}
+                <div class="card-body">
+                  <a href="teacher-single.html">
+                    <h4 class="card-title">{{prof.user.first_name}} {{prof.user.last_name}} </h4>
+                  </a>
+                  <p>Enseignant</p>
+                  <ul class="list-inline">
+                    <li class="list-inline-item"><a class="text-color" href="https://facebook.com/themefisher"><i class="ti-facebook"></i></a></li>
+                    <li class="list-inline-item"><a class="text-color" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
+                    <li class="list-inline-item"><a class="text-color" href="https://github.com/themefisher"><i class="ti-google"></i></a></li>
+                    <li class="list-inline-item"><a class="text-color" href="https://instagram.com/themefisher/"><i class="ti-linkedin"></i></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+        {% endfor %}
+        <!-- teacher -->
+       
+        <!-- teacher -->
+       
+      </div>
+    </div>
+  </section>
