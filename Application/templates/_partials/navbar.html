@@ -1,134 +1,128 @@
 {% load static %}
 
+<style>
+  
+</style>
 <header class="fixed-top header">
- <!-- navbar -->
-
-
-    <!-- top header -->
-    <div class="top-header py-2 bg-white">
-      <div class="container">
-        {% if messages %}
-          <ul>
-            {% for message in messages %}
-              {% if message.tags == 'error' %}
-                <li class="alert alert-danger">{{ message }}</li>
-              {% elif message.tags == 'success' %}
-                <li class="alert alert-success">{{ message }}</li>
-              {% elif message.tags == 'warning' %}
-                <li class="alert alert-warning">{{ message }}</li>
-              {% elif message.tags == 'info' %}
-                <li class="alert alert-info">{{ message }}</li>
-              {% else %}
-                <li>{{ message }}</li>
-              {% endif %}
-            {% endfor %}
+  <!-- top header -->
+  <div class="top-header py-2 bg-white">
+    <div class="container">
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            {% if message.tags == 'error' %}
+              <li class="alert alert-danger">{{ message }}</li>
+            {% elif message.tags == 'success' %}
+              <li class="alert alert-success">{{ message }}</li>
+            {% elif message.tags == 'warning' %}
+              <li class="alert alert-warning">{{ message }}</li>
+            {% elif message.tags == 'info' %}
+              <li class="alert alert-info">{{ message }}</li>
+            {% else %}
+              <li>{{ message }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <div class="row no-gutters">
+        <div class="col-lg-4 text-center text-lg-left">
+          <a class="text-color mr-3" href="tel:+443003030266"><strong>contact</strong> +224 626 613 835</a>
+          <ul class="list-inline d-inline">
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://facebook.com/themefisher/"><i class="ti-facebook"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://github.com/themefisher"><i class="ti-github"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://instagram.com/themefisher/"><i class="ti-instagram"></i></a></li>
           </ul>
-        {% endif %}
-        <div class="row no-gutters">
-          <div class="col-lg-4 text-center text-lg-left">
-            <a class="text-color mr-3" href="tel:+443003030266"><strong>contact</strong> +224 626 613 835</a>
-            <ul class="list-inline d-inline">
-              <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://facebook.com/themefisher/"><i class="ti-facebook"></i></a></li>
-              <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
-              <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://github.com/themefisher"><i class="ti-github"></i></a></li>
-              <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://instagram.com/themefisher/"><i class="ti-instagram"></i></a></li>
-            </ul>
-          </div>
-          <div class="col-lg-8 text-center text-lg-right">
-            <ul class="list-inline">
-              <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="notice.html"><i class="ti-bell 2x"></i></a></li>
-              {% if not user.is_authenticated %}
-                <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="{% url 'login' %}">Connexion</a></li>
-              {% endif %}
-              <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="{% url 'verifier' %}">Inscription</a></li>
-              {% if user.is_authenticated %}
+        </div>
+        <div class="col-lg-8 text-center text-lg-right">
+          <ul class="list-inline">
+            <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="notice.html"><i class="ti-bell 2x"></i></a></li>
+            {% if not user.is_authenticated %}
+              <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="{% url 'login' %}">Connexion</a></li>
+            {% endif %}
+            <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="{% url 'verifier' %}">Inscription</a></li>
+            {% if user.is_authenticated %}
               <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="notice.html">{{ user.username }}</a></li>
               <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="{% url 'logout' %}">Déconnexion</a></li>
-              {% endif %}
-            
-            </ul>
-          
-          </div>
+            {% endif %}
+          </ul>
         </div>
       </div>
     </div>
-   
+  </div>
+  
+  <!-- navbar -->
+  <div class="navigation w-100">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'images/small_logo.png' %}" alt="logo" style="width:50px; height:50px"> Centre Informatique</a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="navigation w-100">
-      <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-dark p-0">
-          <a class="navbar-brand" href="index.html"><img src="{% static 'images/small_logo.png'%}" alt="logo" style="width:50px; height:50px">Centre Informatique</a>
-          <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
-            aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navigation" style="display: flex; justify-content:end">
-              <ul class="navbar-nav ml-auto text-center">
-                <li class="nav-item active">
-                  <a class="nav-link text-white" href="{% url 'index'%}">Accueil</a>
-                </li>
-                  {% if user.is_authenticated and user.professeur %}
-                    <li class="nav-item @@about">
-                      <a class="nav-link" href="{% url 'choix_matiere_noter' %}">Notes</a>
-                    </li>
-                    <li class="nav-item @@about">
-                      <a class="nav-link" href="{% url 'choix_matiere_presence'%}">Présence</a>
-                    </li>
+        <div class="collapse navbar-collapse" id="navigation">
+          <ul class="navbar-nav ml-auto text-center">
+            <li class="nav-item active">
+              <a class="nav-link text-white" href="{% url 'index' %}">Accueil</a>
+            </li>
+            {% if user.is_authenticated and user.professeur %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'choix_matiere_noter' %}">Notes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'choix_matiere_presence' %}">Présence</a>
+              </li>
+            {% endif %}
+            {% if user.is_authenticated and user.etudiant %}
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">Emplois</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'notes' %}">Mes Notes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'opportunite' %}">Opportunités</a>
+              </li>
+            {% endif %}
+            {% if user.etudiant %}
+              <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'cours' %}">Cours</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'matiere_a_archiver' %}">Archives</a>
+              </li>
+            {% endif %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Plus</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="teacher.html">Professeurs</a>
+                {% if user.is_authenticated %}
+                  <a class="dropdown-item" href="">Reglements I.</a>
+                  <a class="dropdown-item" href="">Evenements</a>
+                  {% if user.etudiant %}
+                    <a class="dropdown-item" href="">Evaluer Cours</a>
                   {% endif %}
-                {% if user.is_authenticated and user.etudiant %}
-                <li class="nav-item @@about">
-                  <a class="nav-link" href="about.html">Emplois</a>
-                </li>
-              {% endif %}
-                {% if user.is_authenticated and user.etudiant %}
-                  <li class="nav-item @@courses">
-                    <a class="nav-link" href="{% url 'notes' %}">Mes Notes</a>
-                  </li>
-                  <li class="nav-item @@blog">
-                    <a class="nav-link" href="blog.html">Opportunités</a>
-                  </li>
+                  {% if user.professeur %}
+                    <a class="dropdown-item" href="{% url 'cours' %}">Cours</a>
+                    <a class="dropdown-item" href="">Emploi</a>
+                  {% endif %}
                 {% endif %}
-                <li class="nav-item @@events">
-                  <a class="nav-link text-white " href="{% url 'cours'%}">Cours</a>
-                </li>
-                <li class="nav-item dropdown view">
-                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Plus
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="teacher.html">Professeurs</a></li>
-                  {% comment %} <li class="text-white"><a class="dropdown-item" href="">Blog</a></li> {% endcomment %}
-                  {% if user.is_authenticated %}
-                    <li><a class="dropdown-item" href="">Reglements I.</a></li>
-                    <li><a class="dropdown-item" href="">Evenements</a></li>
-                    {% if user.etudiant %}
-                    <li><a class="dropdown-item" href="">Evaluer Cours</a></li>
-                    {% endif %}
-                    {% if user.professeur %}
-                    <li><a class="dropdown-item" href="{% url 'matiere_a_archiver'%}">Archives</a></li>
-
-                    <li><a class="dropdown-item" href="">Emploi</a></li>
-                    {% endif %}
-                  {% endif %}
-                </ul>
-              </li>
-              <li class="nav-item @@contact">
-                <a class="nav-link text-white" href="contact.html">CONTACT</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </div>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="contact.html">CONTACT</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
     </div>
-  </header>
-  <!-- /header -->
-  <!-- Modal -->
- 
+  </div>
+</header>
 
-
+<!-- Old header in comment -->
 {% comment %} 
-
-   <!-- header -->
+<!-- header -->
 <header class="fixed-top header">
   <!-- top header -->
   <div class="top-header py-2 bg-white">
@@ -160,11 +154,9 @@
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-dark p-0">
         <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="logo"></a>
-        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
-          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navigation">
           <ul class="navbar-nav ml-auto text-center">
             <li class="nav-item active">
@@ -183,9 +175,7 @@
               <a class="nav-link" href="blog.html">BLOG</a>
             </li>
             <li class="nav-item dropdown view">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Pages
-              </a>
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="teacher.html">Teacher</a></li>
                 <li><a class="dropdown-item" href="teacher-single.html">Teacher Single</a></li>
@@ -196,11 +186,8 @@
                 <li><a class="dropdown-item" href="course-single.html">Course Details</a></li>
                 <li><a class="dropdown-item" href="event-single.html">Event Details</a></li>
                 <li><a class="dropdown-item" href="blog-single.html">Blog Details</a></li>
-                
                 <li class="dropdown-item dropdown dropleft">
-                  <a class="dropdown-toggle" href="#" id="navbarDropdownSubmenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Sub Menu
-                  </a>
+                  <a class="dropdown-toggle" href="#" id="navbarDropdownSubmenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
                   <ul class="dropdown-menu dropdown-submenu" aria-labelledby="navbarDropdownSubmenu">
                     <li><a class="dropdown-item" href="#!">Sub Menu 01</a></li>
                     <li><a class="dropdown-item" href="#!">Sub Menu 02</a></li>
@@ -217,68 +204,6 @@
       </nav>
     </div>
   </div>
-</header>
+</header> 
+{% endcomment %}
 <!-- /header -->
-<!-- Modal -->
-<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content rounded-0 border-0 p-4">
-            <div class="modal-header border-0">
-                <h3>Register</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="login">
-                    <form action="#" class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control mb-3" id="signupPhone" name="signupPhone" placeholder="Phone">
-                        </div>
-                        <div class="col-12">
-                            <input type="text" class="form-control mb-3" id="signupName" name="signupName" placeholder="Name">
-                        </div>
-                        <div class="col-12">
-                            <input type="email" class="form-control mb-3" id="signupEmail" name="signupEmail" placeholder="Email">
-                        </div>
-                        <div class="col-12">
-                            <input type="password" class="form-control mb-3" id="signupPassword" name="signupPassword" placeholder="Password">
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary">SIGN UP</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content rounded-0 border-0 p-4">
-            <div class="modal-header border-0">
-                <h3>Login</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="#" class="row">
-                    <div class="col-12">
-                        <input type="text" class="form-control mb-3" id="loginPhone" name="loginPhone" placeholder="Phone">
-                    </div>
-                    <div class="col-12">
-                        <input type="text" class="form-control mb-3" id="loginName" name="loginName" placeholder="Name">
-                    </div>
-                    <div class="col-12">
-                        <input type="password" class="form-control mb-3" id="loginPassword" name="loginPassword" placeholder="Password">
-                    </div>
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-primary">LOGIN</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> {% endcomment %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Opportunites{% endblock title %}
+{% block containt %}
+
+<!-- page title -->
+
+        <section class="page-title-section overlay" data-background="{% static 'images/backgrounds/page-title.jpg' %}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <ul class="list-inline custom-breadcrumb mb-2">
+                            <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="{% url 'index' %}">Accueil</a></li>
+                            <li class="list-inline-item text-white h3 font-secondary nasted">Opportunités</li>
+                            <li class="list-inline-item text-white h3 font-secondary nasted"><i>{{ matiere.libele }}</i></li>
+                        </ul>
+                        <p class="text-lighten mb-0">Ici vous trouvez les opportunités de stage, d'emploi et d'autre types Uniquement pour vous </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /page title -->
+
+
+        <section class="section">
+           
+    
+            <div class="container">
+              <div class="row">
+                  <div class="col-12">
+                    {% for type_stage in type_stages %}
+                        <a href="?type={{type_stage.slug}}" class="btn btn-primary m-0 onglet" >{{type_stage.libele}}</a>
+                    {% endfor %}
+                    <a href="?type=" class="btn btn-primary onglet">Tous les Types</a>
+                  <ul class="list-unstyled mt-3">
+                    <!-- notice item -->
+                    {% for opportunite in opportunites  %}
+                    <li class="d-md-table mb-4 w-100 border-bottom hover-shadow">
+                      <div class="d-md-table-cell text-center p-4 bg-primary text-white mb-4 mb-md-0"> <span class="h2 d-block">{{opportunite.date_limite|date:'d'}}</span>{{opportunite.date_limite | date:'M Y'}}</div>
+                      <div class="d-md-table-cell px-4 vertical-align-middle mb-4 mb-md-0">
+                        <a href="#" class="h4 mb-3 d-block" style="text-decoration:none">{{opportunite.titre}}</a>
+                        <p class="mb-0">{{opportunite.description | slice:'400'}}...</p>
+                        <div>
+                        {% if opportunite.piece_jointe %}<p> <i class="fas fa-joint"></i>Piece jointe:{{opportunite.piece_jointe}}</p>{% endif %}
+                        <p><b><i class="text-primary fas fa-clock">{{opportunite.date_pub}}</i></b></p>
+                    </div>
+                      </div>
+                      <div class="d-md-table-cell text-right pr-0 pr-md-4"><a href="{% url 'opportunite_detail' opportunite.slug%}" class="btn btn-primary">Voir plus</a></div>
+                      
+                    </li>
+                    <!-- notice item -->
+                  {% endfor %}
+                 
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- /notice -->
+          
+{% endblock %}
+

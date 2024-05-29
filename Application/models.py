@@ -179,11 +179,14 @@ class Type_opportunite(models.Model):
 
 
 class Opportunite(models.Model):
+    titre = models.CharField(max_length=200)
     type_op = models.ForeignKey(Type_opportunite, on_delete=models.CASCADE)
     description = models.TextField(default="votre description ici")
     partenaire = models.ForeignKey(Partenaire, on_delete=models.CASCADE)
     piece_jointe = models.FileField(upload_to='documents_televerser', max_length=100, blank=True, null=True)
     date_pub = models.DateTimeField(auto_now=True)
+    date_limite = models.DateTimeField(null=True, blank=True)
+    slug = models.SlugField()    
 
 
 class Post(models.Model):

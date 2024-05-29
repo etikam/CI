@@ -15,8 +15,8 @@
             </select>
             </div>
             <div class="col-sm-5 form-group">
-            <label for="Sémestre: " class="form-label">Sémestres</label>
-            <select name="semestre" id="departement" class="form-select  ">
+            <label for="semestre: " class="form-label">Sémestres</label>
+            <select name="semestre" id="semestre" class="form-select  ">
                 <option value="">Tous les Semestres</option>       
                 {% for sem in semestres %}
                     <option value="{{sem.numero}}">{{sem.numero}}</option>       

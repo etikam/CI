@@ -6,8 +6,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
-        <meta name="author" content="Kamano Tamba Etienne" />
-        <title>Statistiques</title>
+        <meta name="author" content="" />
+        <title></title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="{% static 'notes/css/styles.css' %}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -108,9 +108,14 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-pie"></i></div>
                                 Présence
                             </a>   
+                            <a class="nav-link" href="{% url 'statistiques' matiere.slug %}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-pie"></i></div>
+                                Statistiques
+                            </a>
+
                             <a class="nav-link text-white" href="{% url 'statistiques' matiere.slug %}">
                                 <div class="sb-nav-link-icon text-white"><i class="fas fa-chart-pie"></i></div>
-                                Statistiques
+                                Statistiques Individuelles
                             </a>
                         </div>
                     </div>
@@ -124,7 +129,7 @@
                                 <div class="col-md-8">
                                     <ul class="list-inline custom-breadcrumb mb-2">
                                         <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="{% url 'index'%}">Accueil</a></li>
-                                        <li class="list-inline-item text-white h3 font-secondary nasted">Présence et Statistiques</li>
+                                        <li class="list-inline-item text-white h3 font-secondary nasted">Présence et Statistiques Individuelle de {{Etudiant.user.last_name}}  {{Etudiant.user.first_name}}</li>
                                     </ul>
                                     <p class="text-lighten mb-0">Ici vous pouvez modifier les status de présences de vos Etudiants et visualiser les statistiques sur les niveaux d'évolutions, leur taux d'absence et bien d'autres</p>
                                 </div>
@@ -132,42 +137,44 @@
                         </div>
                     </section>
                     <div class="container-fluid px-4">
-                        <h1 style="color: blue; font-weight:1000">Statistiques Générales de présence en {{ matiere.libele }}</h1>
                         <div class="container d-flex flex-wrap presence" style="padding: 2%; width:90%; display:block">
                             <div class="row" style="width:100%;">
-                                <div class="statistiques_Globales container col-md-6">
+                                
+                                <div class="statistiques_Globales container col-sm-6">
                                     <div class="carres col-sm bg">
                                         <canvas id="overallChart"></canvas>
                                     </div>
                                 </div>
-                                <div class="statistiques_Globales container col-md-6">
+                                <div class="statistiques_Globales container col-sm-6">
+                                    <div class="carres col-sm bg">
+                                        <canvas id="apreciation"></canvas>
+                                    </div>
+                                </div>
+                                {% comment %} <div class="statistiques_Globales container col-6">
                                     <div class="carres col-sm bg">
                                         <canvas id="genderChart"></canvas>
                                     </div>
-                                </div>
-                                <input class="col-2 mt-1 mb-3 form-control" type="search" name="Recherche" id="Search_Etudiant" placeholder="Chercher un Etudiant" style="right: 0px;">
-                            </div>
-                            <form method="post" action="#" class="needs-validation" novalidate style="width: 100%;">
-                                {% csrf_token %}
-                                <input type="hidden" name="matiere_slug" value="{{ matiere.slug }}">
-                                {% for Etudiant in Etudiants %}
-                                <a href="{% url 'statistique_etudiant' Etudiant.user.username matiere.slug %}" style="text-decoration:none" class="student" data-username="{{ Etudiant.user.username }}" data-name="{{ Etudiant.user.last_name }} {{ Etudiant.user.first_name }}">
-                                    <div class="Etudiant_note row mb-2" style="width:100%">
-                                        {% comment %} {% if Etudiant.photo_profile %}
-                                            <img class="col-3" src="{{ Etudiant.photo_profile.url }}" alt="profile">
-                                        {% else %}
-                                            <img class="col-3" src="" alt="profile">
-                                        {% endif %} {% endcomment %}
-                                        <h3 class="col-6 student-info">
-                                            <span class="student-username" style="color: blue;">{{ Etudiant.user.username }}</span>
-                                            <span class="student-name">{{ Etudiant.user.last_name.upper }} {{ Etudiant.user.first_name.upper }}</span>
-                                        </h3>
-                                    </div>
-                                </a>
-                                
-                                {% endfor %}
-                            </form>
+                                </div> {% endcomment %}
+                                            
+                             </div>    
+                            
+                            
+                            
                         </div>
+                        <div class="row">
+                               
+                               
+                            <!-- Les  Jour que l'Etudiant s'est absenté -->
+                                                 
+                                    {% for absence in absences  %}
+                                            <h5 class="col-12 alert alert-info">{{absence.date}}</h5>
+                                    {% endfor %}
+                              
+                            
+                
+                            <!-- Les Projets auquels l'Etudiant à particié -->
+                        </div>  
+                    
                     </div>
                 </main>
             </div>
@@ -181,59 +188,11 @@
         <script src="{% static 'notes/js/datatables-simple-demo.js' %}"></script>
         <script src="{% static 'Application/style/jquery-3.7.1.min.js' %}"></script>
         <script>
-
-            document.getElementById('Search_Etudiant').addEventListener('input', function () {
-                const searchTerm = this.value.toLowerCase();
-                const students = document.querySelectorAll('.student');
-                students.forEach(student => {
-                    const username = student.getAttribute('data-username').toLowerCase();
-                    const name = student.getAttribute('data-name').toLowerCase();
-                    if (username.includes(searchTerm) || name.includes(searchTerm)) {
-                        student.style.display = 'flex';
-                        highlight(student, searchTerm);
-                    } else {
-                        student.style.display = 'none';
-                    }
-                });
-            });
-
-            function highlight(student, searchTerm) {
-                const studentInfo = student.querySelector('.student-info');
-                const studentUsername = student.querySelector('.student-username');
-                const studentName = student.querySelector('.student-name');
-
-                // Remove previous highlights
-                removeHighlights(studentInfo);
-
-                // Highlight matching text in username
-                if (studentUsername.textContent.toLowerCase().includes(searchTerm)) {
-                    highlightText(studentUsername, searchTerm);
-                }
-
-                // Highlight matching text in name
-                if (studentName.textContent.toLowerCase().includes(searchTerm)) {
-                    highlightText(studentName, searchTerm);
-                }
+           
+            function highlightMatch(text, index, length) {
+                var highlightedText = text.substring(0, index) + '<span class="highlight">' + text.substring(index, index + length) + '</span>' + text.substring(index + length);
+                return highlightedText;
             }
-
-            function highlightText(element, searchTerm) {
-                const innerHTML = element.innerHTML;
-                const index = innerHTML.toLowerCase().indexOf(searchTerm);
-                if (index >= 0) {
-                    element.innerHTML = innerHTML.substring(0, index) + '<span class="highlight">' + innerHTML.substring(index, index + searchTerm.length) + '</span>' + innerHTML.substring(index + searchTerm.length);
-                }
-            }
-
-            function removeHighlights(element) {
-                const highlightedElements = element.querySelectorAll('.highlight');
-                highlightedElements.forEach(highlight => {
-                    const parent = highlight.parentNode;
-                    parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
-                    parent.normalize();
-                });
-            }
-          
-            //==============================================================
             function present(element) {
                 document.getElementById(element).value = "present";
                 btn = document.getElementsByClassName(element);
@@ -247,17 +206,12 @@
                 btn[1].classList.add("btn-danger");
             }
         </script>
-        <style>
-            .highlight {
-                background-color: yellow;
-                font-weight: bold;
-            }
-        </style>
+        
         {% include "_partials/footer_link.html" %}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const ctxOverall = document.getElementById('overallChart').getContext('2d');
-                const ctxGender = document.getElementById('genderChart').getContext('2d');
+                const ctxappreciation = document.getElementById('apreciation').getContext('2d');
                 
                 // Overall Presence Pie Chart
                 new Chart(ctxOverall, {
@@ -266,10 +220,10 @@
                         labels: ['Présence', 'Absence'],
                         datasets: [{
                             label: 'Taux de présence et d\'absence',
-                            data: [{{ taux_presents }}, {{ taux_absents }}],
+                            data: [{{ taux_presence }}, {{ taux_absence }}],
                             backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)'],
                             borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
-                            borderWidth: 2
+                            borderWidth: 5
                         }]
                     },
                     options: {
@@ -289,37 +243,40 @@
                     }
                 });
 
-                // Gender-wise Presence Bar Chart
-                new Chart(ctxGender, {
-                    type: 'bar',
+                // Appreciation graphique en courbe
+                new Chart(ctxappreciation, { 
+                    type: 'line',
                     data: {
-                        labels: ['Hommes', 'Femmes'],
+                        labels: ['Note 1', "Notes 2", "Notes 3"],
                         datasets: [
                             {
-                                label: 'Présence',
-                                data: [{{ taux_garcons_presents }}, {{ taux_filles_presents }}],
+                                label: 'Evolution des notes de l\'Etudiant',
+                                data: {{ notes|safe }},
                                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                                 borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
+                                fill: false,
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1
                             },
-                            {
-                                label: 'Absence',
-                                data: [{{ taux_garcons_absents }}, {{ taux_filles_absents }}],
-                                backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderWidth: 1
-                            }
+                           
                         ]
                     },
                     options: {
+                        animations: {
+                            tension: {
+                              duration: 1000,
+                              easing: 'linear',
+                              from: 1,
+                              to: 0,
+                              loop: true
+                            }
+                          },
+                        
                         responsive: true,
                         scales: {
                             y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Pourcentage'
-                                }
+                                min: 0,
+                                max: 10
                             }
                         },
                         plugins: {

@@ -584,14 +584,9 @@ link:focus,
 .navbar .dropdown .dropdown-menu li {
   padding-top: 10px;
 }
-.navbar .dropdown .dropdown-menu li:last-child {
-  padding-bottom: 15px;
-}
-.navbar .dropdown .dropdown-menu.dropdown-submenu {
-  top: 0;
-}
+
 @media (max-width: 991px) {
-  .navbar .dropdown .dropdown-menu.dropdown-submenu li:first-child {
+  .navbar .dropdown .dropdown-menu li:first-child {
     margin-top: 15px;
   }
 }
@@ -621,7 +616,7 @@ link:focus,
 @media (max-width: 991px) {
   .navbar .dropdown-menu {
     padding-left: 15px;
-    display: none;
+    display: block;
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -642,7 +637,7 @@ link:focus,
 }
 .navbar .dropdown .dropdown .dropdown-toggle, .navbar .dropdown-item {
   position: relative;
-  color: #1e1e4b;
+  color: #2828a7;
   transition: 0.2s ease;
   text-transform: capitalize;
   font-family: "Poppins", sans-serif;

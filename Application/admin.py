@@ -6,7 +6,7 @@ from django.contrib import admin
 from .models import *
 from django.contrib import admin
 from .forms import EtudiantForm, ProfesseurForm
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin 
 
 '''
     Cette configuration permet aux tables(models) de votre fichier models.py de 
@@ -86,8 +86,9 @@ class Type_opportuniteAdmin(admin.ModelAdmin):
 #===========OPPORTUNITÉ==========================================
 @admin.register(Opportunite)
 class Opportunite(admin.ModelAdmin):
-    list_display = ('type_op','description','partenaire','piece_jointe')
+    list_display = ('titre','type_op','description','partenaire','piece_jointe')
     list_filter = ('type_op',)
+    prepopulated_fields = {'slug':('titre',)}
 
 #===========PARTENAIRE==========================================
 @admin.register(Partenaire)

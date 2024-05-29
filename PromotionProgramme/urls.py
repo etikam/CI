@@ -38,8 +38,9 @@ urlpatterns = [
     path('presence/<str:matiere_slug>/',presence,name="presence"),
     path("enregistrer_presence/", enregistrer_presence, name="enregistrer_presence"),
     path('statistique_etudiant/<str:matricule>/<str:matiere>/',statistique_etudiant,name="statistique_etudiant"),
-
-
+    path('opportunite/',opportunite,name="opportunite"),
+    path('opportunite_detail/<str:opportunite>/',opportunite_detail,name="opportunite_detail"),
+    path('postulation/<int:opport_id>/',postulation,name="postulation"),
     path('statistiques/<str:matiere>/',statistiques_presence, name="statistiques"),
 
 

@@ -306,13 +306,18 @@ def Note(request):
     if request.method == "POST":
         licence_choisie = request.POST.get('licence')
         semestre_choisi = request.POST.get('semestre')
-
-        if licence_choisie and licence_choisie != "Toutes":
-            notes = notes.filter(Etudiant__licence__slug=licence_choisie)
+        
+        # try:
+        #     licence_choisie_converted = int(licence_choisie)
+        #     if licence_choisie_converted and licence_choisie != "Toutes":
+        #         notes = notes.filter(Etudiant__licence__numero=licence_choisie_converted)
+        # except TypeError:
+        #     pass
+    
 
         if semestre_choisi and semestre_choisi != "Toutes":
             # matieres = Matiere.objects.filter(semestre__slug=semestre_choisi)
-            notes = notes.filter(matiere__semestre__slug=semestre_choisi)
+            notes = notes.filter(matiere__semestre__numero=int(semestre_choisi))
 
     context = {
         # "licences": unique_licences,
@@ -336,46 +341,57 @@ def opportunite(request):
         'opportunites': opportunite,
         'type_stages': type_stages,
     }
-    return render(request, 'Application/opportunites.html', context)
+    return render(request, 'opportunite/opportunite.html', context)
 
-@login_required
-def postulation(request, id_user, opport, partenaire, opport_id):
+@login_required(login_url='login')
+def opportunite_detail(request,opportunite):
+    Opporte = get_object_or_404(Opportunite,slug=opportunite)
+    context = {
+        'opportunite': Opporte,
+    }
+    return render(request,"opportunite/details_opportunite.html", context)
+
+
+
+@login_required(login_url='login')
+def postulation(request, opport_id):
     # Récupérez l'objet Etudiant et Opportunite correspondant aux identifiants fournis
     # opportunite = Opportunite.objects.get(pk=id_op)
-    erreur_repostulation = ''
+
     if request.method == 'POST':
         # Récupérez les données du formulaire
+        
+        opport = get_object_or_404(Opportunite,id=opport_id)
         nom = request.POST.get('nom')
         prenom = request.POST.get('prenom')
         email = request.POST.get('email')
         motivation = request.POST.get('motivation')
         telephone = request.POST.get('telephone')
         adresse = request.POST.get('adresse')
-        post_existant = Post.objects.filter(matricule=id_user, code_post=opport_id)
+        post_existant = Post.objects.filter(matricule=User.username, code_post=opport_id)
         if post_existant:
-            erreur_repostulation = 'Vous avez déja postuler à cette opportunité'
-            return render(request, 'Application/deja_postule.html', {'erreur_repostulation': erreur_repostulation})
-
+            messages.error(request,'Vous avez déja postuler à cette opportunité')
+            
         # Créez une instance de Post et pré-remplissez les champs
         post = Post(
             nom=nom,
             prenom=prenom,
             email=email,
-            matricule=id_user,
+            matricule=User.username,
             opportunite=opport,
-            partenaire=partenaire,
+            partenaire=opport.partenaire.nom,
             motivation=motivation,
             adresse=adresse,
             code_post=opport_id,
             telephone=telephone)
         # Faites d'autres modifications au besoin avant de sauvegarder définitivement
         post.save()
-
+        messages.success(request,f'Votre postulation chez {opport.partenaire.nom} a bien été enregistré')
         return redirect('opportunite')  # Redirection après le traitement
     else:
         # Affichage initial du formulaire avec les données pré-remplies
-        context = {'opportunite': opportunite}
-        return render(request, 'Application/postulation.html', context)
+        # context = {'opportunite': opportunite}
+        return render(request, 'opportunite/postulation.html')
 
 
 @login_required
@@ -701,40 +717,47 @@ def statistiques_presence(request, matiere):
 
 
 @login_required(login_url='connexion')
-def statistique_etudiant(request,matricule,matiere):
-    Etudiant = get_object_or_404(get_user_model(),username=matricule)
-    mat = get_object_or_404(Matiere,slug=matiere)
-    Etudiant_presence_total = Presence.objects.filter(etudiant=Etudiant,matiere=mat).count()
-    Etudiant_presence = Presence.objects.filter(etudiant=Etudiant,matiere=mat,present=True).count()
-    Etudiant_absence = Presence.objects.filter(etudiant=Etudiant,matiere=mat,absent=True).count()
-    Absence = Presence.objects.filter(etudiant=Etudiant,matiere=mat,absent=True)
+def statistique_etudiant(request, matricule, matiere):
+    # Récupérer l'étudiant et la matière
+    etudiant = get_object_or_404(Etudiant, user__username=matricule)
+    mat = get_object_or_404(Matiere, slug=matiere)
     
-    taux_presence = round(Etudiant_presence*100/(Etudiant_presence_total if Etudiant_presence_total else 1),2)
-    taux_absence = round(Etudiant_absence*100/(Etudiant_presence_total if Etudiant_presence_total else 1),2)
-    etudiant_notes = get_object_or_404(Notes,Etudiant=Etudiant,matiere=mat)
+    # Calcul des présences et absences
+    total_presence = Presence.objects.filter(etudiant=etudiant, matiere=mat).count()
+    presence_count = Presence.objects.filter(etudiant=etudiant, matiere=mat, present=True).count()
+    absence_count = Presence.objects.filter(etudiant=etudiant, matiere=mat, absent=True).count()
+    absences = Presence.objects.filter(etudiant=etudiant, matiere=mat, absent=True)
     
-    observation = "Aucune appréciation"
-    if(etudiant_notes.note1 !=0.0 and etudiant_notes.moyenne()>=1.8):
-        observation ="Il commence plutôt Bien"
-    if(etudiant_notes.note2!=0.0 and etudiant_notes.moyenne()>=3.6):
-        observation ="Il évolue en bon élan"
-    if(etudiant_notes.note3!=0.0 and etudiant_notes.moyenne()>=6):
-        observation = "Un bon Etudiant"
+    # Calcul des taux de présence et d'absence
+    taux_presence = round(presence_count * 100 / (total_presence if total_presence else 1), 2)
+    taux_absence = round(absence_count * 100 / (total_presence if total_presence else 1), 2)
     
+    # Récupérer les notes de l'étudiant pour la matière
+    etudiant_notes = get_object_or_404(Notes, Etudiant=etudiant, matiere=mat)
     
-        
-    
-    
-    context={
-        "Etudiant":Etudiant,
-        "matiere":mat,
-        "taux_presence":taux_presence,
-        "taux_absence":taux_absence,
-        "Absence":Absence,
-        "observation":observation,
-    }
-    return render(request,'Application/statistiques_etudiant.html',context)
+    # Déterminer l'observation basée sur les notes
+    # observation = "Aucune appréciation"
+    # if etudiant_notes.note1 != 0.0 and etudiant_notes.moyenne() >= 1.8:
+    #     observation = "Il commence plutôt Bien"
+    # if etudiant_notes.note2 != 0.0 and etudiant_notes.moyenne() >= 3.6:
+    #     observation = "Il évolue en bon élan"
+    # if etudiant_notes.note3 != 0.0 and etudiant_notes.moyenne() >= 6:
+    #     observation = "Un bon Etudiant"
 
+    notes = [etudiant_notes.note1,etudiant_notes.note2,etudiant_notes.note3]  #les notes de l'Etudiant pour les présenter sur un graphique d'évolution
+    
+    # Préparer le contexte pour le template
+    context = {
+        "Etudiant": etudiant,
+        "matiere": mat,
+        "taux_presence": taux_presence,
+        "taux_absence": taux_absence,
+        "absences": absences,
+        "notes": notes,
+    }
+    
+    # Rendre le template avec le contexte
+    return render(request, 'presence/statistiques_individuelle.html', context)
 
 
 
