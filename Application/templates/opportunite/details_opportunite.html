@@ -36,9 +36,11 @@
                       <h3 class="mb-4">{{opportunite.titre}}</h3>
                       <p>{{opportunite.description}}</p>
                       <div class="row">
+                        {% if opportunite.partenaire.logo %}
                         <div class="col-1">
                         <img src="{{opportunite.partenaire.logo.url}}" alt="logo" style="width: 30px; height:30px">
                         </div>
+                        {% endif %}
                         <p class="col-11 text-primary">{{opportunite.partenaire.nom}}</p>
                       </div>
                       <ul class="list-styled mb-5">

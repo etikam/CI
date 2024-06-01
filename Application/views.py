@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from PIL import Image
+
 User = get_user_model()
 # Création des vues
 #=====================PAGE D'ACCUEIL=====================================
@@ -368,16 +370,16 @@ def postulation(request, opport_id):
         motivation = request.POST.get('motivation')
         telephone = request.POST.get('telephone')
         adresse = request.POST.get('adresse')
-        post_existant = Post.objects.filter(matricule=User.username, code_post=opport_id)
+        post_existant = Post.objects.filter(matricule=request.user.username, code_post=opport_id)
         if post_existant:
             messages.error(request,'Vous avez déja postuler à cette opportunité')
-            
+            return redirect('opportunite')
         # Créez une instance de Post et pré-remplissez les champs
         post = Post(
             nom=nom,
             prenom=prenom,
             email=email,
-            matricule=User.username,
+            matricule=request.user.username,
             opportunite=opport,
             partenaire=opport.partenaire.nom,
             motivation=motivation,
@@ -766,54 +768,51 @@ def temoignage(request):
     context = {'temoin': temoin}
     return render(request, 'Application/histoire&temoignage.html', context)
 @login_required(login_url="login")
-def profile(request):
-    # Profile Etudiant:
-    update_status_success = ""
-    update_status_error = ""
+def update_profile(request):
 
-    if request.user:
-        Etudiant = request.user  
-        
+        print("je suis rentré dans le update_profile")
         if request.method == "POST":
-
+            user = request.user
             email = request.POST.get('email')
             telephone = request.POST.get('tel')
-            photo_profile = request.FILES.get('photo_profile')
-
+            photo_profile = request.FILES.get('photo')
+            adresse = request.POST.get("adresse")
+            print(photo_profile)
             try:
-
-                user = request.user
+                etudiant = get_object_or_404(Etudiant,user=user) 
+                print("j'ai recuperé l'etudiant")
                 if email and email != user.email:
                     user.email = email
-                else:
-                    pass
-                if telephone and telephone != user.tel:
-                    user.tel = telephone
-                else:
-                    pass
-                   
+                print("j'ai enregistré l'email")
+                if telephone and telephone != etudiant.tel:
+                    etudiant.tel = telephone
+                    print("j'ai enregistré le tel")
+                if adresse and adresse != etudiant.adresse:
+                    etudiant.adresse = adresse
+                    print("j'ai enregistré l'adresse")
                 if photo_profile:
-                    user.photo_profile = photo_profile
-                else:
-                    pass
-
+                    try:
+                        # Vérifiez si le fichier téléchargé est une image
+                        img = Image.open(photo_profile)
+                        img.verify()  # Vérifie si le fichier est une image valide
+                        etudiant.photo_profile = photo_profile
+                        print("j'ai enregistré l'image")
+                    except:
+                        messages.error(request, "Le fichier que vous avez soumis n'est pas une image.")
+                        return redirect('index')
+                etudiant.save()
                 user.save()
-                update_status_success = "Modifications effectuées avec succès"
-            except Exception as e:
-                print(e)
-                update_status_error = "Modifications non effectuées"
-
-        context = {
-            "Etudiant": Etudiant,
-            "update_status_success": update_status_success,
-            "update_status_error": update_status_error
-        }
+                messages.success(request,"Profile mise à jour avec succès")
+                return redirect('index')
+            except:
+                 messages.error(request,"Erreur de mise à jour du Profile")
+                 return redirect('index')
         
-        return render(request, "Application/profile_Etudiant.html", context)
-    else:
+        
+    
+    
+    
 
-        messages.error(request, "Vous devez être un étudiant pour accéder à cette page.")
-        return redirect('connexion')
     
 def events(request):
     # Récupération des types d'événements

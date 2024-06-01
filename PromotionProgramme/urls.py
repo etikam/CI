@@ -43,6 +43,9 @@ urlpatterns = [
     path('postulation/<int:opport_id>/',postulation,name="postulation"),
     path('statistiques/<str:matiere>/',statistiques_presence, name="statistiques"),
 
+    path('update_profile/',update_profile, name="update_profile"),
+    
+
 
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
