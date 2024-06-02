@@ -56,7 +56,7 @@ class Etudiant(models.Model):
   
     tel = models.CharField(max_length=50,blank=True, null=True)
     photo_profile = models.ImageField(upload_to="img_profile_etudiant", blank=True, null=True)
-    is_etudiant = models.BooleanField(default=True,editable=False) #l'attribut editable=False interdit l'edition de ce champ pour que l'Etudiant reste Etudiant, qu'il n'ya aucune possibilité de decocher ce champ
+    # is_etudiant = models.BooleanField(default=True,editable=False) #l'attribut editable=False interdit l'edition de ce champ pour que l'Etudiant reste Etudiant, qu'il n'ya aucune possibilité de decocher ce champ
     def __str__(self):
          if self.user:
            return f"{self.user.username} - {self.user.last_name} {self.user.first_name}"
@@ -77,7 +77,7 @@ class Professeur(models.Model):
     tel = models.CharField(max_length=50,blank=True, null=True)
     competence = models.TextField( blank=True, null=True)
     photo_profile = models.ImageField(upload_to="img_profile_prof", blank=True, null=True)
-    is_professeur = models.BooleanField(default=True, editable=False) #l'attribut editable=False interdit l'edition de ce champ pour que le professeur reste professeur, qu'il n'ya aucune possibilité de decocher ce champ
+    # is_professeur = models.BooleanField(default=True, editable=False) #l'attribut editable=False interdit l'edition de ce champ pour que le professeur reste professeur, qu'il n'ya aucune possibilité de decocher ce champ
     def __str__(self):
          if self.user:
              return f"{self.user.username} - {self.user.last_name} {self.user.first_name}"

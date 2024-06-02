@@ -1,12 +1,15 @@
 from django.contrib import admin
 
-from import_export import resources
-from import_export.admin import ImportExportModelAdmin
+# Register your models here.
+
 from django.contrib import admin
 from .models import *
 from django.contrib import admin
 from .forms import EtudiantForm, ProfesseurForm
 from django.contrib.auth.admin import UserAdmin 
+from import_export import resources
+from .resources import EtudiantResource
+from import_export.admin import ImportExportModelAdmin
 
 '''
     Cette configuration permet aux tables(models) de votre fichier models.py de 
@@ -193,41 +196,29 @@ class EventAdmin(admin.ModelAdmin):
 #=================ADMINISTRATION DU FORMULAIRE D'ENREGISTREMENT DES ETUDIANTS TOUT EN LES LIANT AU FORMULAIRE USER  ===============================
 
 @admin.register(Etudiant)
-class EtudiantAdmin(admin.ModelAdmin):
+class EtudiantAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = EtudiantResource
     form = EtudiantForm
 
     def save_model(self, request, obj, form, change):
-        # Créer l'utilisateur avec les données récupérées du formulaire
-        user = User.objects.create_user(
+        user, created = User.objects.get_or_create(
             username=form.cleaned_data['matricule'],
-            password='CI2023@2024',
-            first_name=form.cleaned_data['prenom'],
-            last_name=form.cleaned_data['nom'],
-            is_active=False
+            defaults={
+                'first_name': form.cleaned_data['prenom'],
+                'last_name': form.cleaned_data['nom'],
+                'is_active': False,
+                'password': 'CI2023@2024',
+            }
         )
-        user.save()
+        if created:
+            user.set_password('CI2023@2024')
+            user.save()
+        obj.user = user
+        super().save_model(request, obj, form, change)
 
-        # Créer l'étudiant associé à cet utilisateur
-        etudiant = Etudiant.objects.create(
-            user=user,
-            pv=form.cleaned_data['pv'],
-            ine=form.cleaned_data['ine'],
-            pere=form.cleaned_data['pere'],
-            mere=form.cleaned_data['mere'],
-            date_naissance=form.cleaned_data['date_naissance'],
-            lieu_naissance=form.cleaned_data['lieu_naissance'],
-            ecole_origine=form.cleaned_data['ecole_origine'],
-            departement=form.cleaned_data['departement'],
-            licence=form.cleaned_data['licence'],
-            genre=form.cleaned_data['genre']
-        )
-
-        etudiant.save()
-        # Maintenant, créer les instances de Notes pour cet étudiant dans toutes les matières existantes
         matieres = Matiere.objects.all()
         for matiere in matieres:
-            Notes.objects.create(Etudiant=etudiant, matiere=matiere)
-
+            Notes.objects.get_or_create(etudiant=obj, matiere=matiere)
 
 
 #=================ADMINISTRATION DU FORMULAIRE D'ENREGISTREMENT DES PROFESSEURS TOUT EN LES LIANT AU FORMULAIRE USER  ===============================
