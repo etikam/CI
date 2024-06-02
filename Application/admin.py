@@ -201,25 +201,34 @@ class EtudiantAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     form = EtudiantForm
 
     def save_model(self, request, obj, form, change):
-        user, created = User.objects.get_or_create(
-            username=form.cleaned_data['matricule'],
-            defaults={
-                'first_name': form.cleaned_data['prenom'],
-                'last_name': form.cleaned_data['nom'],
-                'is_active': False,
-                'password': 'CI2023@2024',
-            }
-        )
-        if created:
-            user.set_password('CI2023@2024')
-            user.save()
-        obj.user = user
-        super().save_model(request, obj, form, change)
+        try:
+            # Créer ou récupérer l'utilisateur associé
+            user, created = User.objects.get_or_create(
+                username=form.cleaned_data['matricule'],
+                defaults={
+                    'first_name': form.cleaned_data['prenom'],
+                    'last_name': form.cleaned_data['nom'],
+                    'is_active': False,
+                    'password': 'CI2023@2024',
+                }
+            )
+            if created:
+                user.set_password('CI2023@2024')
+                user.save()
+            obj.user = user
+            super().save_model(request, obj, form, change)
+        except Exception as e:
+            print(f"Error saving model: {e}")
+            raise e
 
-        matieres = Matiere.objects.all()
-        for matiere in matieres:
-            Notes.objects.get_or_create(etudiant=obj, matiere=matiere)
-
+        try:
+            # Créer les instances de Notes pour cet étudiant dans toutes les matières existantes
+            matieres = Matiere.objects.all()
+            for matiere in matieres:
+                Notes.objects.create(Etudiant=obj, matiere=matiere, note1=0.0, note2=0.0, note3=0.0)
+        except Exception as e:
+            print(f"Error creating notes: {e}")
+            raise e
 
 #=================ADMINISTRATION DU FORMULAIRE D'ENREGISTREMENT DES PROFESSEURS TOUT EN LES LIANT AU FORMULAIRE USER  ===============================
 @admin.register(Professeur)

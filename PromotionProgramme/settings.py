@@ -84,6 +84,18 @@ DATABASES = {
     }
 }
 
+#configuration mysql
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'PromotionProgramme_db',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',  # ou l'adresse IP de votre serveur MySQL
+#         'PORT': '3306',       # port par défaut pour MySQL
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
