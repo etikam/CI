@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Application.context_processors.eval_cours_form',
             ],
         },
     },
@@ -77,24 +78,27 @@ WSGI_APPLICATION = 'PromotionProgramme.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-#configuration mysql
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'PromotionProgramme_db',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',  # ou l'adresse IP de votre serveur MySQL
-#         'PORT': '3306',       # port par défaut pour MySQL
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+#configuration mysql
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'PromotionProgramme_db',
+        'USER': 'root',
+        'PASSWORD':'',
+        'HOST': 'localhost',  # ou l'adresse IP de votre serveur MySQL
+        'PORT': '3306',       # port par défaut pour MySQL
+        'OPTIONS': {
+            'unix_socket': '/opt/lampp/var/mysql/mysql.sock',  # Assurez-vous que le chemin est correct
+        },
+    }
+}
 
 
 # Password validation
@@ -141,4 +145,6 @@ MEDIA_ROOT =BASE_DIR /'media'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

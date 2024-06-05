@@ -322,7 +322,7 @@ a h4:hover {
 }
 
 .text-color {
-  color: #5c5c77;
+  color: #ffffff;
 }
 
 .text-light {
@@ -920,7 +920,7 @@ link:focus,
 /* /footer */
 .filter-controls li {
   cursor: pointer;
-  transition: 0.1s ease;
+  transition: 0.2s ease;
 }
 .filter-controls li.active {
   font-weight: 600;
@@ -936,7 +936,7 @@ link:focus,
 
 .testimonial-carousel .owl-nav {
   position: absolute;
-  width: calc(100% + 46px);
+  width: calc(100% + 60px);
   height: 46px;
   top: calc(50% - 23px);
   left: -23px;

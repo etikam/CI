@@ -116,23 +116,23 @@
       {% endif %}
       <div class="row no-gutters">
         <div class="col-lg-4 text-center text-lg-left">
-          <a class="text-color mr-3" href="tel:+443003030266"><strong>contact</strong> +224 626 613 835</a>
+          <a class="text-primary mr-3" href="tel:+443003030266"><strong>contact</strong> +224 626 613 835</a>
           <ul class="list-inline d-inline">
-            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://facebook.com/themefisher/"><i class="ti-facebook"></i></a></li>
-            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
-            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://github.com/themefisher"><i class="ti-github"></i></a></li>
-            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-color" href="https://instagram.com/themefisher/"><i class="ti-instagram"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="https://facebook.com/themefisher/"><i class="ti-facebook"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="https://github.com/themefisher"><i class="ti-github"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="https://instagram.com/themefisher/"><i class="ti-instagram"></i></a></li>
           </ul>
         </div>
         <div class="col-lg-8 text-center text-lg-right">
           <ul class="list-inline">
-            <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="notice.html"><i class="ti-bell 2x"></i></a></li>
+            <li class="list-inline-item"><a class="text-uppercase text-primary p-sm-2 py-2 px-0 d-inline-block" href="notice.html"><i class="ti-bell 2x"></i></a></li>
             {% if not user.is_authenticated %}
-              <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="{% url 'login' %}">Connexion</a></li>
+              <li class="list-inline-item"><a class="text-uppercase text-primary p-sm-2 py-2 px-0 d-inline-block" href="{% url 'login' %}">Connexion</a></li>
             {% endif %}
-            <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="{% url 'verifier' %}">Inscription</a></li>
+            <li class="list-inline-item"><a class="text-uppercase text-primary p-sm-2 py-2 px-0 d-inline-block" href="{% url 'verifier' %}">Inscription</a></li>
             {% if user.is_authenticated %}
-              <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="{% url 'logout' %}">Déconnexion</a></li>
+              <li class="list-inline-item"><a class="text-uppercase text-primary p-sm-2 py-2 px-0 d-inline-block" href="{% url 'logout' %}">Déconnexion</a></li>
               {% if user.etudiant.photo_profile %}
                 <li class="list-inline-item">
                   <img src="{{user.etudiant.photo_profile.url}}" style="width:40px;height:40px; border-radius:30px; margin:0px" data-toggle="modal" data-target="#profileModal">
@@ -197,7 +197,7 @@
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#reglementModal">Reglements I.</a>
                   <a class="dropdown-item" href="">Evenements</a>
                   {% if user.etudiant %}
-                    <a class="dropdown-item" href="">Evaluer Cours</a>
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#evaluation_cour">Evaluer Un Cours</a>
                   {% endif %}
                   <a class="dropdown-item" href="">Emploi</a>
                 {% endif %}
@@ -354,5 +354,34 @@
         <iframe src="{% static 'fichiers/Reglement.pdf' %}" width="100%" height="500px"></iframe>
       </div>
     </div>
+  </div>
+</div>
+
+ <!-- Modal Evaluation du cours -->
+<div class="modal fade" id="evaluation_cour" tabindex="-1" role="dialog" aria-labelledby="evaluation_cour" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="evaluation_cour">Evaluation du Cours</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <!-- ici le formulaire -->
+              <form method="post" action="{% url 'eval_cours' %}">
+                  {% csrf_token %}
+                  {% for field in eval_cours_form %}
+                  <div class="form-group">
+                      <label class="col-form-label col-sm-3" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                      <div class="col-sm-9">
+                          {{ field }}
+                      </div>
+                  </div>
+                  {% endfor %}
+                  <button type="submit" class="btn btn-primary">Envoyer</button>
+              </form>
+          </div>
+      </div>
   </div>
 </div>

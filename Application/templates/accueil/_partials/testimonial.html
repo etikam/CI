@@ -1,0 +1,47 @@
+
+{% load static %}
+
+
+
+    <div class="container-xxl bg-white p-0">
+
+
+
+        <!-- Testimonial Start -->
+        <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="container">
+                <h1 class="text-center mb-5">L'Equipe</h1>
+                <div class="owl-carousel testimonial-carousel">
+                    {% for membre in membres %}
+                        <div class="testimonial-item bg-light rounded p-4">
+                            <h3>Membre developpeur</h3>
+                            <div class="d-flex align-items-center">
+                                <img class="img-fluid flex-shrink-0 rounded image_membre" src="{{membre.photo.url}}" >
+                                <div class="ps-3">
+                                    <div class="row-sm">
+                                        <h6 class="mb-1 ">{{membre.nom}} {{membre.prenom}}</h6>
+                                        <small>{{membre.contact}}</small>
+                                    </div>
+                                    <div>
+                                        <a href="{{membre.facebook}}"><i class="fab fa-facebook"></i></a>
+                                        <a href="{{membre.github}}"><i class="fab fa-github"></i></a>
+                                        <a href="{{membre.linkedin}}"><i class="fab fa-linkedin"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                   
+                </div>
+            </div>
+        </div>
+        <!-- Testimonial End -->
+
+
+ 
+    </div>
+
+   
+</body>
+
+</html>

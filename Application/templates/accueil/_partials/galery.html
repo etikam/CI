@@ -1,0 +1,117 @@
+<style>
+    .galery {
+        width: 100%;
+        background-color: rgb(11, 10, 10);
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-y: hidden;
+  
+        padding: 10px;
+    }
+    
+    .image {
+        flex: 0 0 auto;
+        margin-right: 10px;
+    }
+    
+    .galery img {
+        height: 200px;
+        border-right: 7px solid rgb(0, 0, 0);
+        border-radius: 10%;
+    }
+
+    .galery p{
+      z-index: 1;
+      font-size: larger;
+      font-weight: 500;
+      color: white;
+      position: relative;
+      margin: auto;
+      align-self: center;
+    }
+
+    .image {
+      position: relative; /* Position relative pour positionner les descriptions par rapport aux images */
+  }
+  
+  .image p {
+      position: absolute; /* Position absolue pour positionner les descriptions par rapport aux images */
+      bottom: 0; /* Placer la description au sommet de l'image */
+      left: 0; /* Placer la description à gauche de l'image */
+      width: 100%; /* Utiliser la largeur complète de l'image */
+      margin: 0; /* Réinitialiser les marges pour un meilleur positionnement */
+      background-color: rgba(68, 68, 68, 0.7); /* Ajouter un fond semi-transparent pour la lisibilité */
+      padding: 5px; /* Ajouter un peu de marge intérieure pour l'esthétique */
+      box-sizing: border-box; /* Inclure les marges et les bordures dans le calcul de la largeur */
+      z-index: 1; /* Assurez-vous que les descriptions sont empilées au-dessus des images */
+  }
+  
+    
+    /* Media Query pour masquer la barre de défilement sur mobile */
+    @media only screen and (max-width: 767px) {
+        .galery {
+            overflow-x: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    
+        .galery::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    
+    .sec_galery{
+      background-color: white;
+      padding: 3%
+    }
+
+    
+    section{
+      margin-bottom: -40px;
+    }
+      
+    </style>
+
+</style>
+{% load static %}
+
+    {% comment %} <div class="container-xxl bg-white p-0">
+        <!-- Testimonial Start -->
+        <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="container">
+                <h1 class="text-center mb-5">Notre Gallérie</h1>
+                <div class="owl-carousel testimonial-carousel">
+                    {% for membre in membres %}
+                        <div class="testimonial-item bg-light rounded p-4">
+                            <div class="d-flex align-items-center">
+                                <img class="img-fluid flex-shrink-0 rounded" src="{{membre.photo.url}}" style="width: 200px; height: 200px;">  
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Testimonial End -->
+
+
+ 
+    </div>
+
+    {% endcomment %}
+
+    <section class="sec_galery heading_container heading_center">
+        <h2>Notre Galérie image</h1>
+        <div class="galery">
+          
+          {% for image in membres %}
+          
+          <a href="{{image.photo.url}}" target="_blank">
+          <div class="image">
+            <p>{{image.nom}}</p>
+            <img src="{{image.photo.url}}" alt="">
+            
+          </div>
+        </a>
+          {% endfor %}
+        </div>
+      </section>

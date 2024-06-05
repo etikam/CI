@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from PIL import Image
+from .forms import EvalCoursForm
 
 User = get_user_model()
 # Création des vues
@@ -14,11 +15,13 @@ def index(request):
     
     videoTemoignage  = VideoTemoignage.objects.all()
     professeurs = Professeur.objects.all()
+    membres = MembresEquipe.objects.all()
     cours = Matiere.objects.all()[:6]
     context = {
         'videoTemoignage':videoTemoignage,
         'professeurs':professeurs,
         'cours':cours,
+        'membres':membres,
     } 
     return render(request, 'accueil/index.html',context)
     # ==================================================================
@@ -838,3 +841,10 @@ def events(request):
 
 
 
+def eval_cours(request):
+    if request.method == 'POST':
+        form = EvalCoursForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"Votre formulaire d'Evaluation a bien été soumis")  # Rediriger vers une page de succès ou autre
+    return redirect('index')

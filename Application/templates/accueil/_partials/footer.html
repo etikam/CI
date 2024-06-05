@@ -1,57 +1,69 @@
-<footer>
-   
+{% load static %}
+<footer >
+   <!-- newsletter -->
+  <div class="newsletter">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-9 ml-auto bg-primary py-5 newsletter-block">
+          <h3 class="text-white">Nous Contacter</h3>
+          <form action="#">
+            <div class="input-wrapper">
+              <input type="text" class="form-control border m-1" id="" name="newsletter" placeholder="Votre Nom et Prenom ...">
+              <input type="email" class="form-control border m-1" id="" name="" placeholder="Votre mail ...">
+              <textarea name="message" id="message" placeholder="Votre message ici ..." class="form-control m-1"></textarea>
+              <button type="submit" value="send" class="btn btn-primary">Soumettre</button>
+              <p class="text-color">Directeur: 66454533434   /email: exemple@gmail.com</p>
+              <p class="text-color">Autre Responsable: 4544343434  /email: exemple@gmail.com</p>
+              <p class="text-color">Autre Responsable: 4544343434  /email: exemple@gmail.com</p>
+              <p class="text-color">Autre Responsable: 4544343434  /email: exemple@gmail.com</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
     <!-- footer content -->
-    <div class="footer bg-footer section border-bottom mt-4">
+    <div class="footer bg-footer section border-bottom ">
       <div class="container">
         <div class="row">
-          <div class="col-lg-4 col-sm-8 mb-5 mb-lg-0">
-            <!-- logo -->
-            <a class="logo-footer" href="index.html"><img class="img-fluid mb-4" src="images/logo.png" alt="logo"></a>
+          
+          <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-md-0">
+            <h4 class="text-white mb-5">Centre Informatique Gamal</h4>
             <ul class="list-unstyled">
-              <li class="mb-2">23621 15 Mile Rd #C104, Clinton MI, 48035, New York, USA</li>
-              <li class="mb-2">+1 (2) 345 6789</li>
-              <li class="mb-2">+1 (2) 345 6789</li>
-              <li class="mb-2">contact@yourdomain.com</li>
-            </ul>
-          </div>
-          <!-- company -->
-          <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-5 mb-md-0">
-            <h4 class="text-white mb-5">COMPANY</h4>
-            <ul class="list-unstyled">
-              <li class="mb-3"><a class="text-color" href="about.html">About Us</a></li>
-              <li class="mb-3"><a class="text-color" href="teacher.html">Our Teacher</a></li>
+              <li class="mb-3"><a class="text-color" href="about.html">A propos de Nous</a></li>
+              <li class="mb-3"><a class="text-color" href="teacher.html">Nos professeurs</a></li>
               <li class="mb-3"><a class="text-color" href="contact.html">Contact</a></li>
-              <li class="mb-3"><a class="text-color" href="blog.html">Blog</a></li>
+              <li class="mb-3"><a class="text-color" href="blog.html">Galérie</a></li>
             </ul>
           </div>
           <!-- links -->
           <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-5 mb-md-0">
-            <h4 class="text-white mb-5">LINKS</h4>
+            <h4 class="text-white mb-5">Lien importants</h4>
             <ul class="list-unstyled">
-              <li class="mb-3"><a class="text-color" href="courses.html">Courses</a></li>
-              <li class="mb-3"><a class="text-color" href="events.html">Events</a></li>
-              <li class="mb-3"><a class="text-color" href="notice.html">Notice</a></li>
-              <li class="mb-3"><a class="text-color" href="scholarship.html">Scholarship</a></li>
+              <li class="mb-3"><a class="text-color" href="{% url 'cours' %}">Cours</a></li>
+              <li class="mb-3"><a class="text-color" href="{% url 'notes'%}">Notes</a></li>
+              <li class="mb-3"><a class="text-color" href="">professeurs</a></li>
+              <li class="mb-3"><a class="text-color" href="{% url 'index'%}">Accueil</a></li>
             </ul>
           </div>
           <!-- support -->
           <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-5 mb-md-0">
-            <h4 class="text-white mb-5">SUPPORT</h4>
+            <h4 class="text-white mb-5">Guide d'Utilisation</h4>
             <ul class="list-unstyled">
-              <li class="mb-3"><a class="text-color" href="https://themefisher.com/blog">Forums</a></li>
-              <li class="mb-3"><a class="text-color" href="https://docs.themefisher.com/">Documentation</a></li>
-              <li class="mb-3"><a class="text-color" href="#!">Language</a></li>
-              <li class="mb-3"><a class="text-color" href="#!">Release Status</a></li>
+              <li class="mb-3"><a class="text-color" href="">Contact</a></li>
+              <li class="mb-3"><a class="text-color" href="https://docs.themefisher.com/">Documentations</a></li>
+              {% comment %} <li class="mb-3"><a class="text-color" href="#!">Language</a></li>
+              <li class="mb-3"><a class="text-color" href="#!">Release Status</a></li> {% endcomment %}
             </ul>
           </div>
           <!-- support -->
           <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-5 mb-md-0">
-            <h4 class="text-white mb-5">RECOMMEND</h4>
+            <h4 class="text-white mb-5">Autres Liens</h4>
             <ul class="list-unstyled">
-              <li class="mb-3"><a class="text-color" href="https://themefisher.com/">WordPress</a></li>
-              <li class="mb-3"><a class="text-color" href="https://themefisher.com/">LearnPress</a></li>
-              <li class="mb-3"><a class="text-color" href="https://themefisher.com/">WooCommerce</a></li>
-              <li class="mb-3"><a class="text-color" href="https://themefisher.com/">bbPress</a></li>
+              <li class="mb-3"><a class="text-color" href="">Gestion de la Bibliothèque</a></li>
+              <li class="mb-3"><a class="text-color" href="">Herbier Nationnal de Guinée</a></li>
+              <li class="mb-3"><a class="text-color" href="">Insertion Professionnel de Gamal</a></li>
+
             </ul>
           </div>
         </div>
@@ -67,15 +79,15 @@
                 var CurrentYear = new Date().getFullYear()
                 document.write(CurrentYear)
               </script> 
-              , designed & developed by <a href="https://themefisher.com/" class="text-muted">Themefisher</a>
+              ,Developper par  <a href="{% url 'index' %}#equipe" class="text-muted">le groupe BG5 Promotion</a> 15eme Promotion du Centre Informatique
             </p>
           </div>
           <div class="col-sm-5 text-sm-right text-center">
             <ul class="list-inline">
-              <li class="list-inline-item"><a class="d-inline-block p-2" href="https://facebook.com/themefisher/"><i class="ti-facebook text-primary"></i></a></li>
-              <li class="list-inline-item"><a class="d-inline-block p-2" href="https://twitter.com/themefisher"><i class="ti-twitter-alt text-primary"></i></a></li>
-              <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/themefisher"><i class="ti-github text-primary"></i></a></li>
-              <li class="list-inline-item"><a class="d-inline-block p-2" href="https://instagram.com/themefisher/"><i class="ti-instagram text-primary"></i></a></li>
+              <li class="list-inline-item"><a class="d-inline-block p-2" href=""><i class="ti-facebook text-primary"></i></a></li>
+              <li class="list-inline-item"><a class="d-inline-block p-2" href=""><i class="ti-twitter-alt text-primary"></i></a></li>
+              <li class="list-inline-item"><a class="d-inline-block p-2" href=""><i class="ti-github text-primary"></i></a></li>
+              <li class="list-inline-item"><a class="d-inline-block p-2" href=""><i class="ti-instagram text-primary"></i></a></li>
             </ul>
           </div>
         </div>

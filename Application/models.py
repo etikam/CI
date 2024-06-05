@@ -158,7 +158,7 @@ class Notes(models.Model):
          return f'{self.Etudiant.user.first_name}   {self.Etudiant.user.last_name}==={self.matiere.libele}'
     class Meta:
         # Ajoutez la contrainte unique
-        unique_together = [['Etudiant','matiere']]
+        unique_together = [['Etudiant','matiere',]]
 
 # Creation de la table Partenaire
 class Partenaire(models.Model):
@@ -268,6 +268,10 @@ class MembresEquipe(models.Model):
     prenom = models.CharField(max_length=50)
     contact = models.CharField(max_length=50)
     photo = models.ImageField(upload_to='photo_membre', blank=True, null=True)
+    facebook = models.CharField(max_length=255, blank=True,null=True)
+    linkdekdin = models.CharField(max_length=255,blank=True,null=True)
+    github = models.CharField(max_length=255,blank=True,null=True)
+    
 
 
 class Presence(models.Model):
@@ -289,29 +293,37 @@ class VideoTemoignage(models.Model):
 
 
 class EvalCours(models.Model):
-    presentation_cours = models.CharField(max_length=50)
-    plan_cours = models.CharField(max_length=50)
-    doc_accompagne = models.CharField(max_length=50)
+    choix=[("Totalement en Désaccord","Totalement en Désaccord"),
+             ("En Désaccord","En Désaccord"),
+             ("Plutot en Désaccord","Plutot en Désaccord"),
+             ("D'accord","D'accord"),
+             ("Plutôt D'accord","Plutôt D'accord"),
+            ("Tout à fait D'accord","Tout à fait D'accord"),
+            ("Aucun Avis","Aucun Avis"),
+    ]
+    presentation_cours = models.CharField(max_length=50, choices=choix)
+    plan_cours = models.CharField(max_length=50,choices=choix)
+    doc_accompagne = models.CharField(max_length=50,choices=choix)
     prepa_leçon = models.TextField()
-    correppondance_matetplan = models.CharField(max_length=50)
-    condition_materiel = models.CharField(max_length=50)
-    planing_sceance = models.CharField(max_length=50)
-    respect_horaire = models.CharField(max_length=50)
-    nombre_etud_propice = models.CharField(max_length=50, null=True)
-    dynamisme_enthousiasme_prof = models.CharField(max_length=50, null=True)
-    interet_cours = models.CharField(max_length=50, null=True)
-    disponibilite_prof = models.CharField(max_length=50, null=True)
-    expression_prof = models.CharField(max_length=50, null=True)
-    respect_etudiant = models.CharField(max_length=50, null=True)
-    climat_cours = models.CharField(max_length=50, null=True)
-    pres_modalite_eval = models.CharField(max_length=50, null=True)
-    aspect_eval = models.CharField(max_length=50, null=True)
-    delai_correction_travaux = models.CharField(max_length=50, null=True)
-    comment_tavaux_eval = models.CharField(max_length=50, null=True)
-    sentiment_equite = models.CharField(max_length=50, null=True)
-    appreciation_global = models.CharField(max_length=50, null=True)
-    points_forts = models.CharField(max_length=50, null=True)
-    amelioration_aspects = models.CharField(max_length=50, null=True)
+    correppondance_matetplan = models.CharField(max_length=50,choices=choix)
+    condition_materiel = models.CharField(max_length=50,choices=choix)
+    planing_sceance = models.CharField(max_length=50,choices=choix)
+    respect_horaire = models.CharField(max_length=50,choices=choix)
+    nombre_etud_propice = models.CharField(max_length=50, null=True,choices=choix)
+    dynamisme_enthousiasme_prof = models.CharField(max_length=50, null=True,choices=choix)
+    interet_cours = models.CharField(max_length=50, null=True,choices=choix)
+    disponibilite_prof = models.CharField(max_length=50, null=True,choices=choix)
+    expression_prof = models.CharField(max_length=50, null=True,choices=choix)
+    respect_etudiant = models.CharField(max_length=50, null=True , choices=choix)
+    climat_cours = models.CharField(max_length=50, null=True, choices=choix)
+    pres_modalite_eval = models.CharField(max_length=50, null=True, choices=choix)
+    aspect_eval = models.CharField(max_length=50, null=True, choices=choix)
+    delai_correction_travaux = models.CharField(max_length=50, null=True, choices=choix)
+    comment_tavaux_eval = models.CharField(max_length=50, null=True, choices=choix)
+    sentiment_equite = models.CharField(max_length=50, null=True, choices=choix)
+    appreciation_global = models.CharField(max_length=50, null=True, choices=choix)
+    points_forts = models.CharField(max_length=50, null=True, choices=choix)
+    amelioration_aspects = models.CharField(max_length=50, null=True, choices=choix)
     remarques_precisions_suggestions = models.TextField(null=True)
     
 

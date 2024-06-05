@@ -44,6 +44,7 @@ urlpatterns = [
     path('statistiques/<str:matiere>/',statistiques_presence, name="statistiques"),
 
     path('update_profile/',update_profile, name="update_profile"),
+    path('eval_cours/', eval_cours, name='eval_cours'),
     
 
 

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block containt %}
+<section class="page-title-section overlay" data-background="{% static 'images/backgrounds/page-title.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <ul class="list-inline custom-breadcrumb mb-2">
+            <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="{% url 'index'%}">Accueil</a></li>
+            <li class="list-inline-item text-white h3 font-secondary nasted">404 Page D'erreur</li>
+          </ul>
+          <p class="text-lighten mb-0">Si vous arrivez sur cette page, c'est que vous avez cliquer sur un lien non valide du site, ou que vous entrez explicitement des liens dans la barre d'adresse</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+        <!-- 404 Start -->
+        <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="container text-center">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
+                        <h1 class="display-1">404</h1>
+                        <h1 class="mb-4">Page non trouvée</h1>
+                        <p class="mb-4">Nous somme désolé mais la page que vous cherchez ne se trouve pas dans nos repertoir, nous vous suggerons de vous retourner à la page d'accueil pour utiliser les liens qui y sont</p>
+                        <a class="btn btn-primary py-3 px-5" href="{% url 'index'%}">Retour à l'Accuiel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 404 End -->
+{% endblock %}
+
+      

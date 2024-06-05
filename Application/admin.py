@@ -6,11 +6,12 @@ from django.contrib import admin
 from .models import *
 from django.contrib import admin
 from .forms import EtudiantForm, ProfesseurForm
-from django.contrib.auth.admin import UserAdmin 
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from import_export import resources
 from .resources import EtudiantResource
 from import_export.admin import ImportExportModelAdmin
 
+admin.site.unregister(User)
 '''
     Cette configuration permet aux tables(models) de votre fichier models.py de 
 
@@ -29,7 +30,7 @@ class DepartementAdmin(admin.ModelAdmin):
 #===========lICENCE==========================================
 @admin.register(Licence)
 class LicenceAdmin(admin.ModelAdmin):
-    list_display = ('numero',)
+    list_display = ('id','numero',)
    
 
 #===========SEMESTRE==========================================
@@ -170,6 +171,10 @@ class SalleAdmin(admin.ModelAdmin):
     '''Admin View for Salle'''
     list_display = ('libele',)
 
+@admin.register(EvalCours)
+class EvaluerCours(admin.ModelAdmin):
+    model=EvalCours
+
 #===========VIDEO_TEMOIGNAGE==========================================
 @admin.register(VideoTemoignage)
 class VideoTemoignageAdmin(admin.ModelAdmin):
@@ -195,40 +200,38 @@ class EventAdmin(admin.ModelAdmin):
 
 #=================ADMINISTRATION DU FORMULAIRE D'ENREGISTREMENT DES ETUDIANTS TOUT EN LES LIANT AU FORMULAIRE USER  ===============================
 
+@admin.register(User)
+class UserAdmin(ImportExportModelAdmin, BaseUserAdmin):
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    search_fields = ('username', 'first_name', 'last_name', 'email')
+    ordering = ('username',)
+
+    def get_import_formats(self):
+        return [format for format in self.formats if format().can_import()]
+
+    def get_export_formats(self):
+        return [format for format in self.formats if format().can_export()]
 @admin.register(Etudiant)
 class EtudiantAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = EtudiantResource
-    form = EtudiantForm
+    list_display = ('user', 'genre', 'ine', 'pv', 'departement', 'licence')
+    search_fields = ('ine', 'user__username', 'user__first_name', 'user__last_name')
+    list_filter = ('departement','licence','date_naissance','lieu_naissance','genre')
 
     def save_model(self, request, obj, form, change):
         try:
-            # Créer ou récupérer l'utilisateur associé
-            user, created = User.objects.get_or_create(
-                username=form.cleaned_data['matricule'],
-                defaults={
-                    'first_name': form.cleaned_data['prenom'],
-                    'last_name': form.cleaned_data['nom'],
-                    'is_active': False,
-                    'password': 'CI2023@2024',
-                }
-            )
-            if created:
-                user.set_password('CI2023@2024')
-                user.save()
+            user = User.objects.get(username=obj.user.username)
             obj.user = user
             super().save_model(request, obj, form, change)
-        except Exception as e:
-            print(f"Error saving model: {e}")
-            raise e
+        except User.DoesNotExist:
+            raise Exception("User does not exist.")
 
-        try:
-            # Créer les instances de Notes pour cet étudiant dans toutes les matières existantes
-            matieres = Matiere.objects.all()
-            for matiere in matieres:
-                Notes.objects.create(Etudiant=obj, matiere=matiere, note1=0.0, note2=0.0, note3=0.0)
-        except Exception as e:
-            print(f"Error creating notes: {e}")
-            raise e
+
+        matieres = Matiere.objects.all()
+        print("=====Création des notes======")
+        for matiere in matieres:
+            print(f'matiere: {matiere.libele}')
+            Notes.objects.create(Etudiant=obj, matiere=matiere, note1=0.0, note2=0.0, note3=0.0)
 
 #=================ADMINISTRATION DU FORMULAIRE D'ENREGISTREMENT DES PROFESSEURS TOUT EN LES LIANT AU FORMULAIRE USER  ===============================
 @admin.register(Professeur)
