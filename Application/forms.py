@@ -22,13 +22,21 @@ class ProfesseurForm(forms.ModelForm):
         model = Professeur
         exclude = ['user','photo_profile']
     
- 
-
 class EvalCoursForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        # On récupère la liste des matières dans les kwargs
+        matiere_choices = kwargs.pop('matiere_choices', None)
+        super().__init__(*args, **kwargs)
+        
+        # Si des matières ont été passées, on les utilise comme choix pour le champ 'cours'
+        if matiere_choices:
+            self.fields['cours'].queryset = matiere_choices
+    
     class Meta:
         model = EvalCours
         fields = '__all__'
         widgets = {
+            # 'cours': forms.Select(attrs={'class': 'form-select'}),
             'presentation_cours': forms.Select(attrs={'class': 'form-select'}),
             'plan_cours': forms.Select(attrs={'class': 'form-select'}),
             'doc_accompagne': forms.Select(attrs={'class': 'form-select'}),

@@ -795,7 +795,7 @@ def update_profile(request):
                     print("j'ai enregistré l'adresse")
                 if photo_profile:
                     try:
-                        # Vérifiez si le fichier téléchargé est une image
+                        # Vérifier si le fichier téléchargé est une image
                         img = Image.open(photo_profile)
                         img.verify()  # Vérifie si le fichier est une image valide
                         etudiant.photo_profile = photo_profile
@@ -839,12 +839,26 @@ def events(request):
     return render(request, 'Application/evenement.html', context)
 
 
-
-
 def eval_cours(request):
     if request.method == 'POST':
+        # Récupérer la matière choisie dans le POST
+        matiere_id = request.POST.get('eval_matiere')
+        if matiere_id:
+            # Charger la matière sélectionnée
+            matiere = Matiere.objects.get(id=matiere_id)
+            # Injecter la matière dans les données POST du formulaire
+            request.POST = request.POST.copy()  # Créer une copie mutable des données POST
+            request.POST['cours'] = matiere.libele
+        
         form = EvalCoursForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request,"Votre formulaire d'Evaluation a bien été soumis")  # Rediriger vers une page de succès ou autre
-    return redirect('index')
+            messages.success(request, "Votre formulaire d'évaluation a bien été soumis")
+            return redirect('index')  # Redirection après soumission réussie
+    else:
+        form = EvalCoursForm()
+
+    return render(request, 'eval_cours_template.html', {'form': form})
+
+
+

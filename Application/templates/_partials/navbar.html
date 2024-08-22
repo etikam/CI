@@ -118,10 +118,10 @@
         <div class="col-lg-4 text-center text-lg-left">
           <a class="text-primary mr-3" href="tel:+443003030266"><strong>contact</strong> +224 626 613 835</a>
           <ul class="list-inline d-inline">
-            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="https://facebook.com/themefisher/"><i class="ti-facebook"></i></a></li>
-            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="https://twitter.com/themefisher"><i class="ti-twitter-alt"></i></a></li>
-            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="https://github.com/themefisher"><i class="ti-github"></i></a></li>
-            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="https://instagram.com/themefisher/"><i class="ti-instagram"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="#"><i class="ti-facebook"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="#"><i class="ti-twitter-alt"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="#"><i class="ti-github"></i></a></li>
+            <li class="list-inline-item mx-0"><a class="d-inline-block p-2 text-primary" href="#"><i class="ti-instagram"></i></a></li>
           </ul>
         </div>
         <div class="col-lg-8 text-center text-lg-right">
@@ -163,6 +163,8 @@
             <li class="nav-item active">
               <a class="nav-link text-white" href="{% url 'index' %}">Accueil</a>
             </li>
+
+          {# =====ONGLET UNIQUEMENT POUR LES PROFESSEUR CONNECTES================== #}
             {% if user.is_authenticated and user.professeur %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'choix_matiere_noter' %}">Notes</a>
@@ -174,10 +176,8 @@
                 <a class="nav-link text-white" href="{% url 'matiere_a_archiver' %}">Archives</a>
               </li>
             {% endif %}
+            {# =====ONGLET UNIQUEMENT POUR LES ETUDIANTS CONNECTES================== #}
             {% if user.is_authenticated and user.etudiant %}
-              <li class="nav-item">
-                <a class="nav-link" href="about.html">Emplois</a>
-              </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'notes' %}">Mes Notes</a>
               </li>
@@ -191,15 +191,13 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Plus</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="teacher.html">Professeurs</a>
+                <a class="dropdown-item" href="{% url 'index'%}#id_prof">Professeurs</a>
                 {% if user.is_authenticated %}
                   <!-- Button trigger modal -->
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#reglementModal">Reglements I.</a>
-                  <a class="dropdown-item" href="">Evenements</a>
                   {% if user.etudiant %}
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#evaluation_cour">Evaluer Un Cours</a>
                   {% endif %}
-                  <a class="dropdown-item" href="">Emploi</a>
                 {% endif %}
               </div>
             </li>
@@ -213,7 +211,7 @@
   </div>
 </header>
 
-<!-- Profile Modal structure -->
+<!-- ======================= Profile Modal structure =========================== -->
 <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -369,18 +367,28 @@
           </div>
           <div class="modal-body">
               <!-- ici le formulaire -->
-              <form method="post" action="{% url 'eval_cours' %}">
-                  {% csrf_token %}
-                  {% for field in eval_cours_form %}
+               <form method="post" action="{% url 'eval_cours' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="eval_matiere" class="col-form-label col-sm-3">Matière</label>
+                  <select name="eval_matiere" id="eval_matiere" class="form-select col-sm-9">
+                      {% for matiere in matiere_eval %}
+                          <option value="{{ matiere.id }}">{{ matiere.libele }}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+                {% for field in eval_cours_form %}
+                {% if field.name != 'cours' %}
                   <div class="form-group">
                       <label class="col-form-label col-sm-3" for="{{ field.id_for_label }}">{{ field.label }}</label>
                       <div class="col-sm-9">
                           {{ field }}
                       </div>
                   </div>
-                  {% endfor %}
-                  <button type="submit" class="btn btn-primary">Envoyer</button>
-              </form>
+                {% endif %}
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form> 
           </div>
       </div>
   </div>

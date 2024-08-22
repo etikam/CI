@@ -301,6 +301,7 @@ class EvalCours(models.Model):
             ("Tout à fait D'accord","Tout à fait D'accord"),
             ("Aucun Avis","Aucun Avis"),
     ]
+    cours = models.CharField(max_length = 150)
     presentation_cours = models.CharField(max_length=50, choices=choix)
     plan_cours = models.CharField(max_length=50,choices=choix)
     doc_accompagne = models.CharField(max_length=50,choices=choix)
